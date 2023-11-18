@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"Shardinator.Windows (Unpackaged)": {
+			"commandName": "Project"
+		},
+		"Shardinator.Windows (Package)": {
+			"commandName": "MsixPackage"
+		}
+	}
+}
