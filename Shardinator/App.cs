@@ -107,7 +107,7 @@ public class App : Application
                 .ConfigureServices((context, services) =>
                 {
                     // TODO: Register your services
-                    //services.AddSingleton<IMyService, MyService>();
+                    services.AddSingleton<IAuthenticationService, Shardinator.Services.Authentication.StorjAuthenticationService>();
                 })
                 .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
             );
