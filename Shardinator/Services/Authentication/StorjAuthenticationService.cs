@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Shardinator.Services.Authentication;
 public class StorjAuthenticationService : IAuthenticationService
 {
-    public string[] Providers => throw new NotImplementedException();
+    public string[] Providers => new[] { "Storj" };
 
     public event EventHandler LoggedOut;
 
@@ -23,6 +23,7 @@ public class StorjAuthenticationService : IAuthenticationService
 
     public async ValueTask<bool> LogoutAsync(IDispatcher? dispatcher, CancellationToken? cancellationToken = null)
     {
+        LoggedOut?.Invoke(this, new EventArgs());
         return true;
     }
 

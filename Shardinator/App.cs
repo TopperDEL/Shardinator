@@ -70,8 +70,8 @@ public class App : Application
                 .Login((sp, dispatcher, credentials, cancellationToken) =>
                 {
                     // TODO: Write code to process credentials that are passed into the LoginAsync method
-                    if (credentials?.TryGetValue(nameof(LoginModel.Username), out var username) ?? false &&
-                        !username.IsNullOrEmpty())
+                    if (credentials?.TryGetValue(nameof(LoginModel.Bucket), out var bucket) ?? false &&
+                        !bucket.IsNullOrEmpty())
                     {
                         // Return IDictionary containing any tokens used by service calls or in the app
                         credentials ??= new Dictionary<string, string>();
