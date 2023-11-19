@@ -6,7 +6,8 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:um="using:Uno.Material"
       NavigationCacheMode="Required"
-      Background="{ThemeResource BackgroundBrush}">
+      Background="{ThemeResource BackgroundBrush}"
+      xmlns:uer="using:Uno.Extensions.Reactive.UI">
 
   <Grid utu:SafeArea.Insets="VisibleBounds">
     <Grid.RowDefinitions>
@@ -19,6 +20,21 @@
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
           Spacing="16">
+      <uer:FeedView Source="{Binding Images}" 
+                  RefreshingState="None">
+        <DataTemplate>
+          <RefreshContainer uer:RefreshContainerExtensions.Command="{Binding Refresh}">
+            <ListView ItemsSource="{Binding Data}">
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Filename}"/>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </RefreshContainer>
+        </DataTemplate>
+      </uer:FeedView>
+
       <TextBox Text="{Binding Name, Mode=TwoWay}"
           PlaceholderText="Enter your name:" />
       <Button Content="Go to Second Page"
