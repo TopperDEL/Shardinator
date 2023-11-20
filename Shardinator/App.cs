@@ -66,7 +66,6 @@ public class App : Application
                     services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                     services.AddSingleton<IShardinatorService, ShardinatorService>();
                 })
-                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
             );
         MainWindow = builder.Window;
 
@@ -94,8 +93,7 @@ public class App : Application
     {
         views.Register(
             new ViewMap(ViewModel: typeof(ShellModel)),
-            new ViewMap<LoginPage, LoginModel>(),
-            new ViewMap<MainPage, MainModel>()
+            new ViewMap<LoginPage, LoginModel>()
         );
 
         routes.Register(

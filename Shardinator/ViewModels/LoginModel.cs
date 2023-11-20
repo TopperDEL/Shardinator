@@ -1,19 +1,21 @@
+using MvvmGen;
+
 namespace Shardinator.ViewModels;
 
-public partial record LoginModel(IDispatcher Dispatcher, INavigator Navigator, IAuthenticationService Authentication)
+[ViewModel]
+[Inject(typeof(IDispatcher))]
+[Inject(typeof(INavigator))]
+[Inject(typeof(IAuthenticationService))]
+public partial class LoginModel
 {
     public string Title { get; } = "Shardinator - Login";
 
-    public IState<string> Bucket => State<string>.Value(this, () => string.Empty);
-
-    public IState<string> AccessGrant => State<string>.Value(this, () => string.Empty);
+    [Property] private string _bucket;
+    [Property] private string _accessGrant;
 
     public async ValueTask Login(CancellationToken token)
     {
-        var bucket = await Bucket ?? string.Empty;
-        var accessGrant = await AccessGrant ?? string.Empty;
-
-        var success = await Authentication.LoginAsync(Dispatcher, new Dictionary<string, string> { { nameof(Bucket), bucket.ToLower()}, { nameof(AccessGrant), accessGrant} });
+        var success = await AuthenticationService.LoginAsync(Dispatcher, new Dictionary<string, string> { { nameof(Bucket), Bucket.ToLower()}, { nameof(AccessGrant), AccessGrant} });
         if (success)
         {
             await Navigator.NavigateViewModelAsync<MainModel>(this, qualifier: Qualifiers.ClearBackStack);
