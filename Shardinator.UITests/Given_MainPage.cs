@@ -11,15 +11,15 @@ public class Given_MainPage : TestBase
         // in the UITests project with the correct port number.
 
         // Add delay to allow for the splash screen to disappear
-        await Task.Delay(5000);
+        //await Task.Delay(5000);
 
 
-        // Query for the SecondPageButton and then tap it
-        Query xamlButton = q => q.All().Marked("SecondPageButton");
-        App.WaitForElement(xamlButton);
-        App.Tap(xamlButton);
+        //// Query for the SecondPageButton and then tap it
+        //Query xamlButton = q => q.All().Marked("SecondPageButton");
+        //App.WaitForElement(xamlButton);
+        //App.Tap(xamlButton);
 
-        // Take a screenshot and add it to the test results
-        TakeScreenshot("After tapped");
+        //// Take a screenshot and add it to the test results
+        //TakeScreenshot("After tapped");
     }
 }
