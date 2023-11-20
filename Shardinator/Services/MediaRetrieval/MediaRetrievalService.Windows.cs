@@ -11,7 +11,7 @@ namespace Shardinator.Services.MediaRetrieval;
 #if WINDOWS
 public partial class MediaRetrievalService : IMediaRetrievalService
 {
-    public async ValueTask<List<MediaReference>> NativeGetMediaReferencesAsync()
+    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(CancellationToken? cancelToken = null)
     {
         var result = new List<MediaReference>();
 

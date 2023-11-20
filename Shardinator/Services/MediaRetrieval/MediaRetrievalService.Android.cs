@@ -28,13 +28,33 @@ public partial class MediaRetrievalService : IMediaRetrievalService
     public const int RequestMedia = 1354;
 
 
-    public async ValueTask<List<MediaReference>> NativeGetMediaReferencesAsync()
+    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(CancellationToken? cancelToken = null)
     {
-        var result = await LoadMediaAsync();
+        stopLoad = false;
 
-        
+        if (!cancelToken.HasValue)
+            cancelToken = CancellationToken.None;
 
-        return result.ToList();
+        // We create a TaskCompletionSource of decimal
+        var taskCompletionSource = new TaskCompletionSource<IList<MediaReference>>();
+
+        // Registering a lambda into the cancellationToken
+        cancelToken.Value.Register(() =>
+        {
+            // We received a cancellation message, cancel the TaskCompletionSource.Task
+            stopLoad = true;
+            taskCompletionSource.TrySetCanceled();
+        });
+
+        _isLoading = true;
+
+        var task = LoadMediaAsync();
+
+        // Wait for the first task to finish among the two
+        var completedTask = await Task.WhenAny(task, taskCompletionSource.Task);
+        _isLoading = false;
+
+        return await completedTask;
     }
 
     async void RequestMediaPermissions()

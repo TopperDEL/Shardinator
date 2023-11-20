@@ -16,8 +16,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
     public event EventHandler<MediaEventArgs> OnMediaReferenceLoaded;
 
-    public async ValueTask<List<MediaReference>> GetMediaReferencesAsync()
+    public async Task<IList<MediaReference>> GetMediaReferencesAsync(CancellationToken? cancelToken = null)
     {
-        return await NativeGetMediaReferencesAsync();
+        return await NativeGetMediaReferencesAsync(cancelToken);
     }
 }
