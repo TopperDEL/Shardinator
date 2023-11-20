@@ -31,7 +31,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                     var media = new MediaReference
                     {
                         Id = Path.GetFileName(image),
-                        Name = image,
+                        Name = Path.GetFileName(image),
                         Type = MediaReferenceTypes.Image,
                         PreviewPath = image,
                         Path = image,
@@ -61,7 +61,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                 var media = new MediaReference
                 {
                     Id = Path.GetFileName(video),
-                    Name = video,
+                    Name = Path.GetFileName(video),
                     Type = MediaReferenceTypes.Video,
                     PreviewPath = video,
                     Path = video,
