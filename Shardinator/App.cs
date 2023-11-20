@@ -1,4 +1,5 @@
 using Shardinator.DataContracts.Interfaces;
+using Shardinator.Services.Authentication;
 using Shardinator.Services.MediaRetrieval;
 
 namespace Shardinator;
@@ -112,6 +113,7 @@ public class App : Application
                     // TODO: Register your services
                     services.AddSingleton<IAuthenticationService, Services.Authentication.StorjAuthenticationService>();
                     services.AddSingleton<IMediaRetrievalService, MediaRetrievalService>();
+                    services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                 })
                 .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
             );

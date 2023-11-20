@@ -30,6 +30,7 @@
     <PackageReference Include="Uno.Extensions.Navigation.WinUI" />
     <PackageReference Include="Uno.Extensions.Reactive.WinUI" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="uplink.NET" />
   </ItemGroup>
 
 

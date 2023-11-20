@@ -23,10 +23,10 @@
           VerticalAlignment="Center"
           Width="600"
           Spacing="16">
-      <TextBox Text="{Binding Bucket}"
+      <TextBox Text="{Binding Bucket, Mode=TwoWay}"
           PlaceholderText="Bucket"
           HorizontalAlignment="Stretch" />
-      <PasswordBox Password="{Binding AccessGrant}"
+      <PasswordBox Password="{Binding AccessGrant, Mode=TwoWay}"
             PlaceholderText="Access grant"
             HorizontalAlignment="Stretch" />
       <Button Content="Login"

@@ -87,5 +87,14 @@
     <ProjectReference Include="..\Shardinator\Shardinator.csproj" />
     <ProjectReference Include="..\Shardinator.DataContracts\Shardinator.DataContracts.csproj" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+    <PackageReference Include="uplink.NET.Droid" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
+    <PackageReference Include="uplink.NET.iOS" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+    <PackageReference Include="uplink.NET.iOS" />
+  </ItemGroup>
   <Import Project="..\Shardinator.Base\base.props" />
 </Project>
