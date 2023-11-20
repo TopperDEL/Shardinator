@@ -16,11 +16,7 @@
     </Grid.RowDefinitions>
     <utu:NavigationBar Content="{Binding Title}" />
 
-    <StackPanel Grid.Row="1"
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          Spacing="16">
-      <uer:FeedView Source="{Binding Images}" 
+      <uer:FeedView Grid.Row="1" Source="{Binding Images}" 
                   RefreshingState="None">
         <DataTemplate>
           <RefreshContainer uer:RefreshContainerExtensions.Command="{Binding Refresh}">
@@ -28,7 +24,7 @@
               <ListView.ItemTemplate>
                 <DataTemplate>
                   <StackPanel Orientation="Horizontal">
-                    <Image Source="{Binding PreviewPath}" MinHeight="150"  MinWidth="150" Stretch="UniformToFill"/>
+                    <Image Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill"/>
                     <TextBlock Text="{Binding Name}"/>
                   </StackPanel>
                 </DataTemplate>
@@ -38,13 +34,12 @@
         </DataTemplate>
       </uer:FeedView>
 
-      <TextBox Text="{Binding Name, Mode=TwoWay}"
+      <!--<TextBox Text="{Binding Name, Mode=TwoWay}"
           PlaceholderText="Enter your name:" />
       <Button Content="Go to Second Page"
           AutomationProperties.AutomationId="SecondPageButton"
           Command="{Binding GoToSecond}" />
       <Button Content="Logout"
-          Command="{Binding Logout}" />
-    </StackPanel>
+          Command="{Binding Logout}" />-->
   </Grid>
 </Page>

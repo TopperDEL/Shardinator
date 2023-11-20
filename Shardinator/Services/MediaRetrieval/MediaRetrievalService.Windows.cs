@@ -24,10 +24,11 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                 // Get all image files in the folder
                 string[] imageFiles = Directory.GetFiles(defaultImageFolderPath, "*.*", SearchOption.AllDirectories)
                     .Where(file => file.ToLower().EndsWith("jpg") || file.ToLower().EndsWith("jpeg") || file.ToLower().EndsWith("png") || file.ToLower().EndsWith("gif") || file.ToLower().EndsWith("bmp"))
+                    .Take(10)
                     .ToArray();
                 foreach (var image in imageFiles)
                 {
-                    result.Add(new MediaReference { Name = image, Type = MediaReferenceTypes.Image });
+                    result.Add(new MediaReference { Name = image, Type = MediaReferenceTypes.Image, PreviewPath = image });
                 }
             }
             catch (Exception ex)
@@ -43,10 +44,11 @@ public partial class MediaRetrievalService : IMediaRetrievalService
             // Get all video files in the folder
             string[] videoFiles = Directory.GetFiles(defaultImageFolderPath, "*.*", SearchOption.AllDirectories)
                 .Where(file => file.ToLower().EndsWith("mp4"))
+                .Take(10)
                 .ToArray();
             foreach (var video in videoFiles)
             {
-                result.Add(new MediaReference { Name = video, Type = MediaReferenceTypes.Video });
+                result.Add(new MediaReference { Name = video, Type = MediaReferenceTypes.Video, PreviewPath = video });
             }
         }
 
