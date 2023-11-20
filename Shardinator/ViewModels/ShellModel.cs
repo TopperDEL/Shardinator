@@ -1,4 +1,4 @@
-namespace Shardinator.Presentation;
+namespace Shardinator.ViewModels;
 
 public class ShellModel
 {

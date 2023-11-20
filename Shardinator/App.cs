@@ -2,6 +2,7 @@ using Shardinator.DataContracts.Interfaces;
 using Shardinator.Services.Authentication;
 using Shardinator.Services.MediaRetrieval;
 using Shardinator.Services.Shardination;
+using Shardinator.ViewModels;
 
 namespace Shardinator;
 

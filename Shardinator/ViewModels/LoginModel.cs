@@ -1,4 +1,4 @@
-namespace Shardinator.Presentation;
+namespace Shardinator.ViewModels;
 
 public partial record LoginModel(IDispatcher Dispatcher, INavigator Navigator, IAuthenticationService Authentication)
 {

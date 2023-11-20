@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 
-namespace Shardinator.Presentation;
+namespace Shardinator.ViewModels;
 
 public partial record MainModel
 {
