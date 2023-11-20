@@ -51,13 +51,13 @@ public partial class MediaRetrievalService : IMediaRetrievalService
     {
         var status = PHPhotoLibrary.AuthorizationStatus;
 
-        bool authotization = status == PHAuthorizationStatus.Authorized;
+        bool authorization = status == PHAuthorizationStatus.Authorized;
 
-        if (!authotization)
+        if (!authorization)
         {
-            authotization = await PHPhotoLibrary.RequestAuthorizationAsync() == PHAuthorizationStatus.Authorized;
+            authorization = await PHPhotoLibrary.RequestAuthorizationAsync() == PHAuthorizationStatus.Authorized;
         }
-        return authotization;
+        return authorization;
 
     }
 
