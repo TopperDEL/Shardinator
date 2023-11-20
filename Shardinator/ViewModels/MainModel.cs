@@ -20,9 +20,7 @@ public partial record MainModel
         _authentication = authentication;
         _mediaRetrievalService = mediaRetrievalService;
         _shardinatorService = shardinatorService;
-        Title = "Main";
-        Title += $" - {localizer["ApplicationName"]}";
-        Title += $" - {appInfo?.Value?.Environment}";
+        Title = "Shardinator";
 
         _mediaRetrievalService.OnMediaReferenceLoaded += _mediaRetrievalService_OnMediaReferenceLoaded;
         _ = LoadMediaAsync();
