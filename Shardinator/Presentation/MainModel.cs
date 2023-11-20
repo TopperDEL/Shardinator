@@ -58,12 +58,6 @@ public partial record MainModel
         await _mediaRetrievalService.GetMediaReferencesAsync();
     }
 
-    public async Task GoToSecond()
-    {
-        var name = await Name;
-        await _navigator.NavigateViewModelAsync<SecondModel>(this, data: new Entity(name!));
-    }
-
     public async ValueTask Logout(CancellationToken token)
     {
         await _authentication.LogoutAsync(token);
