@@ -16,25 +16,19 @@
     </Grid.RowDefinitions>
     <utu:NavigationBar Content="{Binding Title}" />
 
-      <uer:FeedView Grid.Row="1" Source="{Binding Images}" 
-                  RefreshingState="None">
+    <ListView Grid.Row="1" ItemsSource="{Binding Images}">
+      <ListView.ItemTemplate>
         <DataTemplate>
-          <RefreshContainer uer:RefreshContainerExtensions.Command="{Binding Refresh}">
-            <ListView ItemsSource="{Binding Data}">
-              <ListView.ItemTemplate>
-                <DataTemplate>
-                  <StackPanel Orientation="Horizontal">
-                    <Image Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill"/>
-                    <TextBlock Text="{Binding Name}"/>
-                  </StackPanel>
-                </DataTemplate>
-              </ListView.ItemTemplate>
-            </ListView>
-          </RefreshContainer>
+          <StackPanel Orientation="Horizontal">
+            <Image Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill"/>
+            <TextBlock Text="{Binding Name}"/>
+          </StackPanel>
         </DataTemplate>
-      </uer:FeedView>
+      </ListView.ItemTemplate>
+    </ListView>
 
-      <!--<TextBox Text="{Binding Name, Mode=TwoWay}"
+
+    <!--<TextBox Text="{Binding Name, Mode=TwoWay}"
           PlaceholderText="Enter your name:" />
       <Button Content="Go to Second Page"
           AutomationProperties.AutomationId="SecondPageButton"
