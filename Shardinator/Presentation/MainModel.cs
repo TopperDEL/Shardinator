@@ -13,18 +13,19 @@ public partial record MainModel
         IOptions<AppConfig> appInfo,
         IAuthenticationService authentication,
         IMediaRetrievalService mediaRetrievalService,
+        IShardinatorService shardinatorService,
         INavigator navigator)
     {
         _navigator = navigator;
         _authentication = authentication;
         _mediaRetrievalService = mediaRetrievalService;
+        _shardinatorService = shardinatorService;
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
 
-        Images = new ObservableCollection<MediaReference>();
         _mediaRetrievalService.OnMediaReferenceLoaded += _mediaRetrievalService_OnMediaReferenceLoaded;
-        _ = _mediaRetrievalService.GetMediaReferencesAsync();
+        _ = LoadMediaAsync();
     }
 
     private void _mediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
@@ -36,11 +37,25 @@ public partial record MainModel
 
     public IState<string> Name => State<string>.Value(this, () => string.Empty);
 
-    public ObservableCollection<MediaReference> Images { get; set; }
+    public ObservableCollection<MediaReference> Images { get; set; } = new ObservableCollection<MediaReference>();
 
     public async Task ShardinateCommand()
     {
+        var shardinated = await _shardinatorService.ShardinateAsync(Images.First());
+        if (shardinated)
+        {
+            try
+            {
+                Images.Clear();
+            }
+            catch { }
+            await LoadMediaAsync();
+        }
+    }
 
+    private async Task LoadMediaAsync()
+    {
+        await _mediaRetrievalService.GetMediaReferencesAsync();
     }
 
     public async Task GoToSecond()
@@ -56,4 +71,5 @@ public partial record MainModel
 
     private IAuthenticationService _authentication;
     private IMediaRetrievalService _mediaRetrievalService;
+    private IShardinatorService _shardinatorService;
 }
