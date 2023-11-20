@@ -1,3 +1,4 @@
+#if !__ANDROID__ && !WINDOWS
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,10 @@ using Shardinator.DataContracts.Models;
 namespace Shardinator.Services.MediaRetrieval;
 public partial class MediaRetrievalService : IMediaRetrievalService
 {
-    bool stopLoad = false;
-
-    bool _isLoading = false;
-    public bool IsLoading => _isLoading;
-
-    public event EventHandler<MediaEventArgs> OnMediaReferenceLoaded;
-
-    public async ValueTask<List<MediaReference>> GetMediaReferencesAsync()
+    public async ValueTask<List<MediaReference>> NativeGetMediaReferencesAsync()
     {
-        return await NativeGetMediaReferencesAsync();
+        var result = new List<MediaReference>();
+        return result;
     }
 }
+#endif

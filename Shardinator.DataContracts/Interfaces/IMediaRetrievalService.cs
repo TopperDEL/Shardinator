@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 using Shardinator.DataContracts.Models;
 
 namespace Shardinator.DataContracts.Interfaces;
+
+public class MediaEventArgs : EventArgs
+{
+    public MediaReference Media { get; }
+    public MediaEventArgs(MediaReference media)
+    {
+        Media = media;
+    }
+}
 public interface IMediaRetrievalService
 {
+    event EventHandler<MediaEventArgs> OnMediaReferenceLoaded;
+    bool IsLoading { get; }
+
     ValueTask<List<MediaReference>> GetMediaReferencesAsync();
 }

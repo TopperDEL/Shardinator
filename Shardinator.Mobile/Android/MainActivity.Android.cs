@@ -12,4 +12,11 @@ namespace Shardinator.Droid;
 )]
 public class MainActivity : Microsoft.UI.Xaml.ApplicationActivity
 {
+
+    protected override void OnCreate(Bundle bundle)
+    {
+        base.OnCreate(bundle);
+
+        Shardinator.Services.MediaRetrieval.MediaRetrievalService.CurrentActivity = this;
+    }
 }
