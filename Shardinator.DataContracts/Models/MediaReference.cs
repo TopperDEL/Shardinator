@@ -19,4 +19,5 @@ public class MediaReference
     public MediaReferenceTypes Type { get; set; }
     public string PreviewPath { get; set; }
     public string Path { get; set; }
+    public DateTime CreationDate { get; set; }
 }

@@ -206,7 +206,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                     Type = mediaType == (int)MediaType.Video ? MediaReferenceTypes.Video: MediaReferenceTypes.Image,
                                     Name = name,
                                     PreviewPath = filePath,
-                                    Path = path
+                                    Path = path,
+                                    CreationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(created)).DateTime
                                 };
 
                                 using (var h = new Handler(Looper.MainLooper))

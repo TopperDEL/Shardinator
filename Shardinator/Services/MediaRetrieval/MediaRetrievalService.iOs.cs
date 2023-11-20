@@ -63,6 +63,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
     async Task<IList<MediaReference>> LoadMediaAsync()
     {
+        //ToDo: Read Creation-Date, too!
+
         IList<MediaReference> assets = new List<MediaReference>();
         var imageManager = new PHCachingImageManager();
         var hasPermission = await RequestPermissionAsync();

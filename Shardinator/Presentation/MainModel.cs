@@ -38,6 +38,11 @@ public partial record MainModel
 
     public ObservableCollection<MediaReference> Images { get; set; }
 
+    public async Task ShardinateCommand()
+    {
+
+    }
+
     public async Task GoToSecond()
     {
         var name = await Name;

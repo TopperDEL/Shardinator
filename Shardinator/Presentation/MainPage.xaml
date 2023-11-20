@@ -12,17 +12,26 @@
   <Grid utu:SafeArea.Insets="VisibleBounds">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
     <utu:NavigationBar Content="{Binding Title}" />
-
-    <ListView Grid.Row="1" ItemsSource="{Binding Images}">
+    <Button Grid.Row="1" Content="Shardinate!" Command="{Binding ShardinateCommand}"/>
+    <ListView Grid.Row="2" ItemsSource="{Binding Images}">
       <ListView.ItemTemplate>
         <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <Image Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill"/>
-            <TextBlock Text="{Binding Name}"/>
-          </StackPanel>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill"/>
+
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+              <TextBlock Text="{Binding Name}"/>
+              <TextBlock Text="{Binding CreationDate}"/>
+            </StackPanel>
+          </Grid>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>

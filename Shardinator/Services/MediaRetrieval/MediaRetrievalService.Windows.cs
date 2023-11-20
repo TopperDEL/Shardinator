@@ -28,7 +28,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                     .ToArray();
                 foreach (var image in imageFiles)
                 {
-                    var media = new MediaReference { Name = image, Type = MediaReferenceTypes.Image, PreviewPath = image };
+                    var media = new MediaReference { Name = image, Type = MediaReferenceTypes.Image, PreviewPath = image, CreationDate = File.GetCreationTime(image) };
                     result.Add(media);
                     OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));
                 }
@@ -50,7 +50,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                 .ToArray();
             foreach (var video in videoFiles)
             {
-                var media = new MediaReference { Name = video, Type = MediaReferenceTypes.Video, PreviewPath = video };
+                var media = new MediaReference { Name = video, Type = MediaReferenceTypes.Video, PreviewPath = video, CreationDate = File.GetCreationTime(video) };
                 result.Add(media);
                 OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));
             }
