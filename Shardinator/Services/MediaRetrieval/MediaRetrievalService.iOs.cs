@@ -133,7 +133,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                 {
 
 
-                                    asset.PreviewPath = fileName;
+                                    //asset.PreviewPath = fileName;
 
                                 }
 

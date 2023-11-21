@@ -1,4 +1,4 @@
-﻿namespace Shardinator.Presentation;
+namespace Shardinator.Presentation;
 
 public sealed partial class MainPage : Page
 {

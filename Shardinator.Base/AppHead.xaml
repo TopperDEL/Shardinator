@@ -3,6 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:wasm="http://platform.uno/wasm"
        xmlns:local="using:Shardinator"
+       xmlns:conv="using:Shardinator.Converter"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        mc:Ignorable="wasm">
 
@@ -11,6 +12,8 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///Shardinator/AppResources.xaml" />
       </ResourceDictionary.MergedDictionaries>
+
+      <conv:StreamToBitmapImageConverter x:Key="StreamToBitmapImageConverter"/>
     </ResourceDictionary>
   </local:App.Resources>
 

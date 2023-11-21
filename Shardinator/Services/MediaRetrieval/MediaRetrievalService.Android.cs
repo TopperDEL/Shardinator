@@ -12,6 +12,7 @@ using Android.OS;
 using Android.Provider;
 using Android.Runtime;
 using AndroidX.Core.App;
+using Java.IO;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Uno.UI.ViewManagement;
@@ -25,7 +26,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
     static TaskCompletionSource<bool> mediaPermissionTcs;
 
-    public const int RequestMedia = 1354;
+    public const int RequestMedia = 4711;
 
 
     public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(CancellationToken? cancelToken = null)
@@ -155,7 +156,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                         MediaStore.Files.FileColumns.Title,
                         MediaStore.Files.FileColumns.Parent,
                         MediaStore.Files.FileColumns.DisplayName,
-                        MediaStore.Files.FileColumns.Size
+                        MediaStore.Files.FileColumns.Size,
+                        MediaStore.Files.FileColumns.RelativePath
                 }, $"{MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Image} OR {MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Video}", null, $"{MediaStore.Files.FileColumns.DateAdded} ASC");
                 if (cursor.Count > 0)
                 {
@@ -183,38 +185,37 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                     });
                                     break;
                             }
-                            var tmpPath = System.IO.Path.GetTempPath();
                             var name = GetString(cursor, MediaStore.Files.FileColumns.DisplayName);
-                            var filePath = System.IO.Path.Combine(tmpPath, $"tmp_{name}");
-
                             var path = GetString(cursor, MediaStore.Files.FileColumns.Data);
                             var created = GetString(cursor, MediaStore.Files.FileColumns.DateAdded);
 
-                            //filePath = path;
-                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            var thumbnailStream = new MemoryStream();
+                            bitmap?.Compress(Bitmap.CompressFormat.Png, 100, thumbnailStream);
+
+                            var mediaUri = MediaStore.Files.GetContentUri("external", id);
+                            var asset = new MediaReference()
                             {
-                                bitmap?.Compress(Bitmap.CompressFormat.Png, 100, stream);
-                                stream.Close();
-                            }
+                                Id = $"{id}",
+                                Type = mediaType == (int)MediaType.Video ? MediaReferenceTypes.Video : MediaReferenceTypes.Image,
+                                Name = name,
+                                Path = path,
+                                CreationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(created)).DateTime,
+                                MediaStream = Uno.UI.ContextHelper.Current.ContentResolver.OpenInputStream(mediaUri),
+                                MediaURI = mediaUri.ToString(),
+                                ThumbnailStream = thumbnailStream
+                            };
+
+                            //var s1 = System.IO.File.OpenRead(mediaUri.Path);
+                            string pathCombined = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "file", "34");
+                            var exists = System.IO.Directory.Exists(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,"DCIM"));
+                            var files = System.IO.Directory.GetFiles(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "DCIM"));
+                            var s2 = System.IO.File.OpenRead(path);
 
 
-                            if (!string.IsNullOrWhiteSpace(filePath))
-                            {
-                                var asset = new MediaReference()
-                                {
-                                    Id = $"{id}",
-                                    Type = mediaType == (int)MediaType.Video ? MediaReferenceTypes.Video: MediaReferenceTypes.Image,
-                                    Name = name,
-                                    PreviewPath = filePath,
-                                    Path = path,
-                                    CreationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(created)).DateTime
-                                };
+                            using (var h = new Handler(Looper.MainLooper))
+                                h.Post(async () => { OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(asset)); });
 
-                                using (var h = new Handler(Looper.MainLooper))
-                                    h.Post(async () => { OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(asset)); });
-
-                                assets.Add(asset);
-                            }
+                            assets.Add(asset);
 
                             if (assets.Count >= 10)
                                 break;

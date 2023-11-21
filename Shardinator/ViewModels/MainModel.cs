@@ -7,6 +7,7 @@ namespace Shardinator.ViewModels;
 public partial record MainModel
 {
     private INavigator _navigator;
+    private IDispatcher _dispatcher;
 
     public MainModel(
         IStringLocalizer localizer,
@@ -14,12 +15,14 @@ public partial record MainModel
         IAuthenticationService authentication,
         IMediaRetrievalService mediaRetrievalService,
         IShardinatorService shardinatorService,
+        IDispatcher dispatcher,
         INavigator navigator)
     {
         _navigator = navigator;
         _authentication = authentication;
         _mediaRetrievalService = mediaRetrievalService;
         _shardinatorService = shardinatorService;
+        _dispatcher = dispatcher;
         Title = "Shardinator";
 
         _mediaRetrievalService.OnMediaReferenceLoaded += _mediaRetrievalService_OnMediaReferenceLoaded;
@@ -28,7 +31,14 @@ public partial record MainModel
 
     private void _mediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
     {
-        Images.Add(e.Media);
+        try
+        {
+            _dispatcher.TryEnqueue(() => Images.Add(e.Media));
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     public string? Title { get; }
@@ -44,7 +54,7 @@ public partial record MainModel
         {
             try
             {
-                Images.Clear();
+                _dispatcher.TryEnqueue(Images.Clear);
             }
             catch { }
             await LoadMediaAsync();
