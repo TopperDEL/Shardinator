@@ -1,4 +1,4 @@
-﻿global using System.Collections.Immutable;
+global using System.Collections.Immutable;
 global using System.Windows.Input;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
@@ -11,11 +11,7 @@ global using Microsoft.UI.Xaml.Media;
 global using Microsoft.UI.Xaml.Navigation;
 global using Shardinator.Business.Models;
 global using Shardinator.DataContracts;
-global using Shardinator.DataContracts.Serialization;
-global using Shardinator.Infrastructure;
 global using Shardinator.Presentation;
-global using Shardinator.Services.Caching;
-global using Shardinator.Services.Endpoints;
 global using Uno.UI;
 global using Windows.ApplicationModel;
 global using Windows.Networking.Connectivity;

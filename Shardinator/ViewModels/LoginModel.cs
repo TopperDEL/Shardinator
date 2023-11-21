@@ -1,4 +1,4 @@
-namespace Shardinator.Presentation;
+namespace Shardinator.ViewModels;
 
 public partial record LoginModel(IDispatcher Dispatcher, INavigator Navigator, IAuthenticationService Authentication)
 {
@@ -13,7 +13,7 @@ public partial record LoginModel(IDispatcher Dispatcher, INavigator Navigator, I
         var bucket = await Bucket ?? string.Empty;
         var accessGrant = await AccessGrant ?? string.Empty;
 
-        var success = await Authentication.LoginAsync(Dispatcher, new Dictionary<string, string> { { nameof(Bucket), bucket}, { nameof(AccessGrant), accessGrant} });
+        var success = await Authentication.LoginAsync(Dispatcher, new Dictionary<string, string> { { nameof(Bucket), bucket.ToLower()}, { nameof(AccessGrant), accessGrant} });
         if (success)
         {
             await Navigator.NavigateViewModelAsync<MainModel>(this, qualifier: Qualifiers.ClearBackStack);

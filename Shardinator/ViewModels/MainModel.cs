@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 
-namespace Shardinator.Presentation;
+namespace Shardinator.ViewModels;
 
 public partial record MainModel
 {
@@ -20,9 +20,7 @@ public partial record MainModel
         _authentication = authentication;
         _mediaRetrievalService = mediaRetrievalService;
         _shardinatorService = shardinatorService;
-        Title = "Main";
-        Title += $" - {localizer["ApplicationName"]}";
-        Title += $" - {appInfo?.Value?.Environment}";
+        Title = "Shardinator";
 
         _mediaRetrievalService.OnMediaReferenceLoaded += _mediaRetrievalService_OnMediaReferenceLoaded;
         _ = LoadMediaAsync();
@@ -56,12 +54,6 @@ public partial record MainModel
     private async Task LoadMediaAsync()
     {
         await _mediaRetrievalService.GetMediaReferencesAsync();
-    }
-
-    public async Task GoToSecond()
-    {
-        var name = await Name;
-        await _navigator.NavigateViewModelAsync<SecondModel>(this, data: new Entity(name!));
     }
 
     public async ValueTask Logout(CancellationToken token)
