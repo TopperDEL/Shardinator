@@ -6,7 +6,7 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IDispatcher))]
 [Inject(typeof(INavigator))]
 [Inject(typeof(IAuthenticationService))]
-public partial class LoginModel
+public partial class LoginViewModel
 {
     [Property] string _title = "Shardinator - Login";
 
@@ -19,7 +19,7 @@ public partial class LoginModel
         var success = await AuthenticationService.LoginAsync(Dispatcher, new Dictionary<string, string> { { nameof(Bucket), Bucket.ToLower()}, { nameof(AccessGrant), AccessGrant} });
         if (success)
         {
-            await Navigator.NavigateViewModelAsync<MainModel>(this, qualifier: Qualifiers.ClearBackStack);
+            await Navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.ClearBackStack);
         }
     }
 

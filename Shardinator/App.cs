@@ -60,8 +60,7 @@ public class App : Application
                 .UseLocalization()
                 .ConfigureServices((context, services) =>
                 {
-                    // TODO: Register your services
-                    services.AddSingleton<IAuthenticationService, Services.Authentication.StorjAuthenticationService>();
+                    services.AddSingleton<IAuthenticationService, StorjAuthenticationService>();
                     services.AddSingleton<IMediaRetrievalService, MediaRetrievalService>();
                     services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                     services.AddSingleton<IShardinatorService, ShardinatorService>();
@@ -81,11 +80,11 @@ public class App : Application
                 var authenticated = await auth.RefreshAsync();
                 if (authenticated)
                 {
-                    await navigator.NavigateViewModelAsync<MainModel>(this, qualifier: Qualifiers.Nested);
+                    await navigator.NavigateViewModelAsync<MainViewModel>(this, qualifier: Qualifiers.Nested);
                 }
                 else
                 {
-                    await navigator.NavigateViewModelAsync<LoginModel>(this, qualifier: Qualifiers.Nested);
+                    await navigator.NavigateViewModelAsync<LoginViewModel>(this, qualifier: Qualifiers.Nested);
                 }
             });
     }
@@ -93,17 +92,17 @@ public class App : Application
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes)
     {
         views.Register(
-            new ViewMap(ViewModel: typeof(ShellModel)),
-            new ViewMap<LoginPage, LoginModel>(),
-            new ViewMap<MainPage, MainModel>()
+            new ViewMap(ViewModel: typeof(ShellViewModel)),
+            new ViewMap<LoginPage, LoginViewModel>(),
+            new ViewMap<MainPage, MainViewModel>()
         );
 
         routes.Register(
-            new RouteMap("", View: views.FindByViewModel<ShellModel>(),
+            new RouteMap("", View: views.FindByViewModel<ShellViewModel>(),
                 Nested: new RouteMap[]
                 {
-                    new RouteMap("Login", View: views.FindByViewModel<LoginModel>()),
-                    new RouteMap("Main", View: views.FindByViewModel<MainModel>()),
+                    new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
+                    new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
                 }
             )
         );

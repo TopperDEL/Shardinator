@@ -12,7 +12,7 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IMediaRetrievalService))]
 [Inject(typeof(IShardinatorService))]
 [Inject(typeof(IDispatcher))]
-public partial class MainModel
+public partial class MainViewModel
 {
     [Property] private bool _isLoading;
     [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
