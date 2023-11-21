@@ -30,7 +30,7 @@
             PlaceholderText="Access grant"
             HorizontalAlignment="Stretch" />
       <Button Content="Login"
-          Command="{Binding Login}"
+          Command="{Binding LoginCommand}"
           HorizontalAlignment="Stretch" />
     </StackPanel>
   </Grid>

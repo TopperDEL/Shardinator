@@ -1,22 +1,19 @@
+using MvvmGen;
+
 namespace Shardinator.ViewModels;
 
-public class ShellModel
+[ViewModel]
+[Inject(typeof(INavigator))]
+[Inject(typeof(IAuthenticationService))]
+public partial class ShellModel
 {
-    private readonly INavigator _navigator;
-
-    public ShellModel(
-        IAuthenticationService authentication,
-        INavigator navigator)
+    partial void OnInitialize()
     {
-        _navigator = navigator;
-        _authentication = authentication;
-        _authentication.LoggedOut += LoggedOut;
+        AuthenticationService.LoggedOut += LoggedOut;
     }
 
     private async void LoggedOut(object? sender, EventArgs e)
     {
-        await _navigator.NavigateViewModelAsync<LoginModel>(this, qualifier: Qualifiers.ClearBackStack);
+        await Navigator.NavigateViewModelAsync<LoginModel>(this, qualifier: Qualifiers.ClearBackStack);
     }
-
-    private readonly IAuthenticationService _authentication;
 }
