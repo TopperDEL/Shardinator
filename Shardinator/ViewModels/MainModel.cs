@@ -11,8 +11,12 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IAuthenticationService))]
 [Inject(typeof(IMediaRetrievalService))]
 [Inject(typeof(IShardinatorService))]
+[Inject(typeof(IDispatcher))]
 public partial class MainModel
 {
+    [Property] private bool _isLoading;
+    [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
+
     partial void OnInitialize()
     {
         MediaRetrievalService.OnMediaReferenceLoaded += MediaRetrievalService_OnMediaReferenceLoaded;
@@ -24,7 +28,7 @@ public partial class MainModel
     {
         try
         {
-            _dispatcher.TryEnqueue(() => Images.Add(e.Media));
+            Dispatcher.TryEnqueue(() => Images.Add(e.Media));
         }
         catch (Exception ex)
         {
@@ -32,26 +36,26 @@ public partial class MainModel
         }
     }
 
-
-    public string? Title { get; }
-
-    public IState<string> Name => State<string>.Value(this, () => string.Empty);
-
-    public bool IsLoading { get; set; }
-
-    public ObservableCollection<MediaReference> Images { get; set; } = new ObservableCollection<MediaReference>();
-
-    public async Task ShardinateCommand()
+    [Command]
+    private async Task Shardinate()
     {
-        var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
-        if (shardinated)
+        IsLoading = true;
+        try
         {
-            try
+            var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
+            if (shardinated)
             {
-                _dispatcher.TryEnqueue(Images.Clear);
+                try
+                {
+                    Dispatcher.TryEnqueue(Images.Clear);
+                }
+                catch { }
+                await LoadMediaAsync();
             }
-            catch { }
-            await LoadMediaAsync();
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 
