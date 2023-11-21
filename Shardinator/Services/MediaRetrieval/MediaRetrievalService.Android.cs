@@ -206,13 +206,6 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                 ThumbnailStream = thumbnailStream
                             };
 
-                            //var s1 = System.IO.File.OpenRead(mediaUri.Path);
-                            string pathCombined = System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "file", "34");
-                            var exists = System.IO.Directory.Exists(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,"DCIM"));
-                            var files = System.IO.Directory.GetFiles(System.IO.Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "DCIM"));
-                            var s2 = System.IO.File.OpenRead(path);
-
-
                             using (var h = new Handler(Looper.MainLooper))
                                 h.Post(async () => { OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(asset)); });
 
