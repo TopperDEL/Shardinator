@@ -1,35 +1,26 @@
 using System.Collections.ObjectModel;
+using MvvmGen;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 
 namespace Shardinator.ViewModels;
 
-public partial record MainModel
+[ViewModel]
+[Inject(typeof(INavigator))]
+[Inject(typeof(IStringLocalizer))]
+[Inject(typeof(IAuthenticationService))]
+[Inject(typeof(IMediaRetrievalService))]
+[Inject(typeof(IShardinatorService))]
+public partial class MainModel
 {
-    private INavigator _navigator;
-    private IDispatcher _dispatcher;
-
-    public MainModel(
-        IStringLocalizer localizer,
-        IOptions<AppConfig> appInfo,
-        IAuthenticationService authentication,
-        IMediaRetrievalService mediaRetrievalService,
-        IShardinatorService shardinatorService,
-        IDispatcher dispatcher,
-        INavigator navigator)
+    partial void OnInitialize()
     {
-        _navigator = navigator;
-        _authentication = authentication;
-        _mediaRetrievalService = mediaRetrievalService;
-        _shardinatorService = shardinatorService;
-        _dispatcher = dispatcher;
-        Title = "Shardinator";
+        MediaRetrievalService.OnMediaReferenceLoaded += MediaRetrievalService_OnMediaReferenceLoaded;
 
-        _mediaRetrievalService.OnMediaReferenceLoaded += _mediaRetrievalService_OnMediaReferenceLoaded;
         _ = LoadMediaAsync();
     }
 
-    private void _mediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
+    private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
     {
         try
         {
@@ -41,18 +32,18 @@ public partial record MainModel
         }
     }
 
+
     public string? Title { get; }
 
     public IState<string> Name => State<string>.Value(this, () => string.Empty);
 
     public bool IsLoading { get; set; }
 
-
     public ObservableCollection<MediaReference> Images { get; set; } = new ObservableCollection<MediaReference>();
 
     public async Task ShardinateCommand()
     {
-        var shardinated = await _shardinatorService.ShardinateAsync(Images.First());
+        var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
         if (shardinated)
         {
             try
@@ -66,15 +57,11 @@ public partial record MainModel
 
     private async Task LoadMediaAsync()
     {
-        await _mediaRetrievalService.GetMediaReferencesAsync();
+        await MediaRetrievalService.GetMediaReferencesAsync();
     }
 
     public async ValueTask Logout(CancellationToken token)
     {
-        await _authentication.LogoutAsync(token);
+        await AuthenticationService.LogoutAsync(token);
     }
-
-    private IAuthenticationService _authentication;
-    private IMediaRetrievalService _mediaRetrievalService;
-    private IShardinatorService _shardinatorService;
 }

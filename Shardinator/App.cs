@@ -66,7 +66,7 @@ public class App : Application
                     services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                     services.AddSingleton<IShardinatorService, ShardinatorService>();
                 })
-                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
+                .UseNavigation(RegisterRoutes)
             );
         MainWindow = builder.Window;
 
