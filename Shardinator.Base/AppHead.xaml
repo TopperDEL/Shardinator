@@ -15,6 +15,7 @@
 
       <conv:StreamToBitmapImageConverter x:Key="StreamToBitmapImageConverter"/>
       <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+      <conv:BooleanToInvertedVisibilityConverter x:Key="BooleanToInvertedVisibilityConverter"/>
     </ResourceDictionary>
   </local:App.Resources>
 

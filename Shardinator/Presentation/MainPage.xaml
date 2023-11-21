@@ -18,7 +18,18 @@
             <RowDefinition />
           </Grid.RowDefinitions>
 
-          <Button Grid.Row="0" Content="Shardinate!" Command="{Binding ShardinateCommand}" HorizontalAlignment="Center" Margin="10" MinWidth="200"/>
+          <Button Grid.Row="0" Content="Shardinate!" Command="{Binding ShardinateCommand}" HorizontalAlignment="Center" Margin="10" MinWidth="200"
+                  Visibility="{Binding IsShardinating,Converter={StaticResource BooleanToInvertedVisibilityConverter}}"/>
+          <Button Grid.Row="0" Command="{Binding StopShardinateCommand}" HorizontalAlignment="Center" Margin="10" MinWidth="200"
+                  Visibility="{Binding IsShardinating,Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+              <TextBlock Text="Stop" Visibility="{Binding IsCancelling,Converter={StaticResource BooleanToInvertedVisibilityConverter}}"/>
+              <StackPanel Orientation="Horizontal" Visibility="{Binding IsCancelling,Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ProgressRing IsActive="true" Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock Text="Stopping..." VerticalAlignment="Center" Margin="10,0,0,0"/>
+              </StackPanel>
+            </Grid>
+          </Button>
           <ListView Grid.Row="1" ItemsSource="{Binding Images}" Margin="10" MaxWidth="700">
             <ListView.ItemTemplate>
               <DataTemplate>
@@ -39,7 +50,7 @@
               </DataTemplate>
             </ListView.ItemTemplate>
           </ListView>
-          <Grid Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
+          <Grid Grid.Row="1" Visibility="{Binding IsShardinating, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Border Background="LightGray" Opacity="0.5"/>
             <ProgressRing IsActive="True"/>
           </Grid>

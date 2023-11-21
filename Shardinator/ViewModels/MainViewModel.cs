@@ -14,7 +14,8 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IDispatcher))]
 public partial class MainViewModel
 {
-    [Property] private bool _isLoading;
+    [Property] private bool _isShardinating;
+    [Property] private bool _isCancelling;
     [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
 
     partial void OnInitialize()
@@ -26,37 +27,55 @@ public partial class MainViewModel
 
     private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
     {
-        try
-        {
-            Dispatcher.TryEnqueue(() => Images.Add(e.Media));
-        }
-        catch (Exception ex)
-        {
-
-        }
+        Dispatcher.TryEnqueue(() => Images.Add(e.Media));
     }
+
+    CancellationTokenSource _cancellationSource;
 
     [Command]
     private async Task Shardinate()
     {
-        IsLoading = true;
+        _cancellationSource = new CancellationTokenSource();
+        var token = _cancellationSource.Token;
+        _ = Shardinate(token);
+    }
+
+    private async Task Shardinate(CancellationToken cancellationToken)
+    {
+        IsShardinating = true;
+
         try
         {
-            var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
-            if (shardinated)
+            while (Images.Count > 0 && !cancellationToken.IsCancellationRequested)
             {
-                try
+                var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
+                if (shardinated)
                 {
-                    Dispatcher.TryEnqueue(Images.Clear);
+                    try
+                    {
+                        Dispatcher.TryEnqueue(Images.Clear);
+                    }
+                    catch { }
+                    await LoadMediaAsync();
                 }
-                catch { }
-                await LoadMediaAsync();
+                else
+                {
+                    //Show error
+                }
             }
         }
         finally
         {
-            IsLoading = false;
+            IsShardinating = false;
+            IsCancelling = false;
         }
+    }
+
+    [Command]
+    private async Task StopShardinate()
+    {
+        IsCancelling = true;
+        _cancellationSource.Cancel();
     }
 
     private async Task LoadMediaAsync()
