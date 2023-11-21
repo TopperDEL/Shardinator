@@ -8,5 +8,5 @@ using Shardinator.DataContracts.Models;
 namespace Shardinator.DataContracts.Interfaces;
 public interface IShardinatorService
 {
-    Task<bool> ShardinateAsync(MediaReference media);
+    Task<bool> ShardinateAsync(MediaReference media, CancellationToken cancellationToken);
 }

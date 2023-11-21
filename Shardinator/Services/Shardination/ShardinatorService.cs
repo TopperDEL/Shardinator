@@ -12,14 +12,16 @@ namespace Shardinator.Services.Shardination;
 public class ShardinatorService : IShardinatorService
 {
     private readonly ILocalSecretsStore _localSecretsStore;
+    private CancellationToken _token;
 
     public ShardinatorService(ILocalSecretsStore localSecretsStore)
     {
         _localSecretsStore = localSecretsStore;
     }
 
-    public async Task<bool> ShardinateAsync(MediaReference media)
+    public async Task<bool> ShardinateAsync(MediaReference media, CancellationToken cancellationToken)
     {
+        _token = cancellationToken;
         try
         {
             string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
@@ -30,20 +32,36 @@ public class ShardinatorService : IShardinatorService
                 var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
                 var objectService = new ObjectService(access);
                 var upload = await objectService.UploadObjectAsync(bucket, targetPath, new uplink.NET.Models.UploadOptions(), media.MediaStream, false).ConfigureAwait(false);
-                await upload.StartUploadAsync().ConfigureAwait(false);
-
-                if (!upload.Completed)
+                upload.UploadOperationProgressChanged += Upload_UploadOperationProgressChanged;
+                if (!_token.IsCancellationRequested)
                 {
-                    return false;
+                    await upload.StartUploadAsync().ConfigureAwait(false);
+
+                    if (!upload.Completed)
+                    {
+                        return false;
+                    }
                 }
             }
 
-            File.Delete(media.Path);
-            return true;
+            if (!_token.IsCancellationRequested)
+            {
+                File.Delete(media.Path);
+                return true;
+            }
+            return false;
         }
-        catch (Exception ex)
+        catch
         {
             return false;
+        }
+    }
+
+    private void Upload_UploadOperationProgressChanged(uplink.NET.Models.UploadOperation uploadOperation)
+    {
+        if(_token!= null && _token.IsCancellationRequested)
+        {
+            uploadOperation.Cancel();
         }
     }
 }

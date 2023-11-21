@@ -48,7 +48,7 @@ public partial class MainViewModel
         {
             while (Images.Count > 0 && !cancellationToken.IsCancellationRequested)
             {
-                var shardinated = await ShardinatorService.ShardinateAsync(Images.First());
+                var shardinated = await ShardinatorService.ShardinateAsync(Images.First(), cancellationToken);
                 if (shardinated)
                 {
                     try
