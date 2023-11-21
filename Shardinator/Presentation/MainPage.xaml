@@ -18,7 +18,7 @@
             <RowDefinition />
           </Grid.RowDefinitions>
 
-          <Button Grid.Row="0" Content="Shardinate!" Command="{Binding ShardinateCommand}" HorizontalAlignment="Center" Margin="10"/>
+          <Button Grid.Row="0" Content="Shardinate!" Command="{Binding ShardinateCommand}" HorizontalAlignment="Center" Margin="10" MinWidth="200"/>
           <ListView Grid.Row="1" ItemsSource="{Binding Images}" Margin="10" MaxWidth="700">
             <ListView.ItemTemplate>
               <DataTemplate>
