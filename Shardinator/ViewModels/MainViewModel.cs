@@ -12,17 +12,21 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IMediaRetrievalService))]
 [Inject(typeof(IShardinatorService))]
 [Inject(typeof(IDispatcher))]
+[Inject(typeof(IGalleryService))]
 public partial class MainViewModel
 {
     [Property] private bool _isShardinating;
     [Property] private bool _isCancelling;
     [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
+    [Property] private GalleryViewModel _gallery;
 
     partial void OnInitialize()
     {
         MediaRetrievalService.OnMediaReferenceLoaded += MediaRetrievalService_OnMediaReferenceLoaded;
 
         _ = LoadMediaAsync();
+
+        Gallery = new GalleryViewModel(GalleryService);
     }
 
     private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)

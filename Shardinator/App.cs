@@ -1,4 +1,5 @@
 using Shardinator.DataContracts.Interfaces;
+using Shardinator.Services;
 using Shardinator.Services.Authentication;
 using Shardinator.Services.MediaRetrieval;
 using Shardinator.Services.Shardination;
@@ -64,6 +65,7 @@ public class App : Application
                     services.AddSingleton<IMediaRetrievalService, MediaRetrievalService>();
                     services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                     services.AddSingleton<IShardinatorService, ShardinatorService>();
+                    services.AddSingleton<IGalleryService, GalleryService>();
                 })
                 .UseNavigation(RegisterRoutes)
             );
