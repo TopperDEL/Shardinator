@@ -8,4 +8,8 @@ using Shardinator.DataContracts.Interfaces;
 namespace Shardinator.Services;
 public class GalleryService : IGalleryService
 {
+    public async Task<List<string>> GetGalleryKeysAsync()
+    {
+        return new List<string>();
+    }
 }

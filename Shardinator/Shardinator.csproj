@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Common" />
     <PackageReference Include="MvvmGen" />
     <PackageReference Include="Uno.WinUI" />
     <PackageReference Include="Uno.Resizetizer" />
@@ -80,5 +81,9 @@
     <EmbeddedResource Include="appsettings.json" />
     <EmbeddedResource Include="appsettings.*.json" DependentUpon="appsettings.json" />
     <UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows10.0.19041'">
+    <PackageReference Include="CommunityToolkit.WinUI.UI" />
   </ItemGroup>
 </Project>
