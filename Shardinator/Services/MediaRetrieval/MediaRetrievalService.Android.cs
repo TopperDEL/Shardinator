@@ -150,7 +150,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                 {
                         MediaStore.Files.FileColumns.Id,
                         MediaStore.Files.FileColumns.Data,
-                        MediaStore.Files.FileColumns.DateAdded,
+                        MediaStore.Files.FileColumns.DateTaken,
                         MediaStore.Files.FileColumns.MediaType,
                         MediaStore.Files.FileColumns.MimeType,
                         MediaStore.Files.FileColumns.Title,
@@ -158,7 +158,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                         MediaStore.Files.FileColumns.DisplayName,
                         MediaStore.Files.FileColumns.Size,
                         MediaStore.Files.FileColumns.RelativePath
-                }, $"{MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Image} OR {MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Video}", null, $"{MediaStore.Files.FileColumns.DateAdded} ASC");
+                }, $"{MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Image} OR {MediaStore.Files.FileColumns.MediaType} = {(int)MediaType.Video}", null, $"{MediaStore.Files.FileColumns.DateTaken} ASC");
                 if (cursor.Count > 0)
                 {
                     while (cursor.MoveToNext())
@@ -187,7 +187,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                             }
                             var name = GetString(cursor, MediaStore.Files.FileColumns.DisplayName);
                             var path = GetString(cursor, MediaStore.Files.FileColumns.Data);
-                            var created = GetString(cursor, MediaStore.Files.FileColumns.DateAdded);
+                            var created = GetString(cursor, MediaStore.Files.FileColumns.DateTaken);
+                            var createDateTime = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(created)).DateTime;
 
                             var thumbnailStream = new MemoryStream();
                             bitmap?.Compress(Bitmap.CompressFormat.Png, 100, thumbnailStream);
@@ -199,7 +200,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                 Type = mediaType == (int)MediaType.Video ? MediaReferenceTypes.Video : MediaReferenceTypes.Image,
                                 Name = name,
                                 Path = path,
-                                CreationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(created)).DateTime,
+                                CreationDate = createDateTime,
                                 MediaStream = Uno.UI.ContextHelper.Current.ContentResolver.OpenInputStream(mediaUri),
                                 MediaURI = mediaUri.ToString(),
                                 ThumbnailStream = thumbnailStream

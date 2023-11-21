@@ -26,11 +26,11 @@ public class ShardinatorService : IShardinatorService
         {
             string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
 
-            var thumbnailShardinated = await ShardinateAsync("thumb/" + targetPath, media.ThumbnailStream);
-            if(thumbnailShardinated)
+            var thumbnailShardinated = await ShardinateAsync("thumb/" + targetPath.Replace("mp4", "png"), media.ThumbnailStream);
+            if (thumbnailShardinated)
             {
                 var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream);
-                if(!fileShardinated)
+                if (!fileShardinated)
                 {
                     return false;
                 }
@@ -55,6 +55,7 @@ public class ShardinatorService : IShardinatorService
 
     private async Task<bool> ShardinateAsync(string targetPath, Stream fileData)
     {
+        fileData.Position = 0;
         using (uplink.NET.Models.Access access = new uplink.NET.Models.Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
         {
             var bucketService = new BucketService(access);
@@ -78,7 +79,7 @@ public class ShardinatorService : IShardinatorService
 
     private void Upload_UploadOperationProgressChanged(uplink.NET.Models.UploadOperation uploadOperation)
     {
-        if(_token!= null && _token.IsCancellationRequested)
+        if (_token != null && _token.IsCancellationRequested)
         {
             uploadOperation.Cancel();
         }
