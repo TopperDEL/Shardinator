@@ -22,15 +22,14 @@ public class ShardinatorService : IShardinatorService
     {
         try
         {
-            string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Id;
+            string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
 
             using (uplink.NET.Models.Access access = new uplink.NET.Models.Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
-            using (var stream = File.OpenRead(media.Path))
             {
                 var bucketService = new BucketService(access);
                 var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
                 var objectService = new ObjectService(access);
-                var upload = await objectService.UploadObjectAsync(bucket, targetPath, new uplink.NET.Models.UploadOptions(), stream, false).ConfigureAwait(false);
+                var upload = await objectService.UploadObjectAsync(bucket, targetPath, new uplink.NET.Models.UploadOptions(), media.MediaStream, false).ConfigureAwait(false);
                 await upload.StartUploadAsync().ConfigureAwait(false);
 
                 if (!upload.Completed)

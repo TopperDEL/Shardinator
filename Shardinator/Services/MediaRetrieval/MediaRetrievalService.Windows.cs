@@ -28,14 +28,16 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                     .ToArray();
                 foreach (var image in imageFiles)
                 {
+                    StorageFile storageFile = await StorageFile.GetFileFromPathAsync(image);
+
                     var media = new MediaReference
                     {
                         Id = Path.GetFileName(image),
-                        Name = image,
+                        Name = Path.GetFileName(image),
                         Type = MediaReferenceTypes.Image,
-                        PreviewPath = image,
                         Path = image,
-                        CreationDate = File.GetCreationTime(image)
+                        CreationDate = File.GetCreationTime(image),
+                        ThumbnailStream = (await storageFile.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem)).AsStream()
                     };
                     result.Add(media);
                     OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));
@@ -58,12 +60,12 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                 .ToArray();
             foreach (var video in videoFiles)
             {
+                StorageFile storageFile = await StorageFile.GetFileFromPathAsync(video);
                 var media = new MediaReference
                 {
                     Id = Path.GetFileName(video),
-                    Name = video,
+                    Name = Path.GetFileName(video),
                     Type = MediaReferenceTypes.Video,
-                    PreviewPath = video,
                     Path = video,
                     CreationDate = File.GetCreationTime(video)
                 };

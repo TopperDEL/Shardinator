@@ -17,7 +17,9 @@ public class MediaReference
     public string Id { get; set; }
     public string Name { get; set; }
     public MediaReferenceTypes Type { get; set; }
-    public string PreviewPath { get; set; }
     public string Path { get; set; }
     public DateTime CreationDate { get; set; }
+    public Stream MediaStream { get; set; }
+    public Stream ThumbnailStream { get; set; }
+    public string MediaURI { get; set; }
 }

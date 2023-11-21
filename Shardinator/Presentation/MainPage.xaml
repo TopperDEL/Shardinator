@@ -28,7 +28,7 @@
                     <ColumnDefinition/>
                   </Grid.ColumnDefinitions>
                   <Grid Grid.Row="0" CornerRadius="0,10,0,10">
-                    <Image Source="{Binding PreviewPath}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill" />
+                    <Image Source="{Binding ThumbnailStream, Converter={StaticResource StreamToBitmapImageConverter}}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill" />
                   </Grid>
 
                   <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
@@ -39,6 +39,10 @@
               </DataTemplate>
             </ListView.ItemTemplate>
           </ListView>
+          <Grid Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
+            <Border Background="LightGray" Opacity="0.5"/>
+            <ProgressRing IsActive="True"/>
+          </Grid>
         </Grid>
       </PivotItem>
 

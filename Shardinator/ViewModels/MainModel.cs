@@ -16,13 +16,28 @@ public partial class MainModel
     partial void OnInitialize()
     {
         MediaRetrievalService.OnMediaReferenceLoaded += MediaRetrievalService_OnMediaReferenceLoaded;
+
         _ = LoadMediaAsync();
     }
 
     private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
     {
-        Images.Add(e.Media);
+        try
+        {
+            _dispatcher.TryEnqueue(() => Images.Add(e.Media));
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
+
+
+    public string? Title { get; }
+
+    public IState<string> Name => State<string>.Value(this, () => string.Empty);
+
+    public bool IsLoading { get; set; }
 
     public ObservableCollection<MediaReference> Images { get; set; } = new ObservableCollection<MediaReference>();
 
@@ -33,7 +48,7 @@ public partial class MainModel
         {
             try
             {
-                Images.Clear();
+                _dispatcher.TryEnqueue(Images.Clear);
             }
             catch { }
             await LoadMediaAsync();
