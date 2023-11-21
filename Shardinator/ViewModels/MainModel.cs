@@ -45,6 +45,9 @@ public partial record MainModel
 
     public IState<string> Name => State<string>.Value(this, () => string.Empty);
 
+    public bool IsLoading { get; set; }
+
+
     public ObservableCollection<MediaReference> Images { get; set; } = new ObservableCollection<MediaReference>();
 
     public async Task ShardinateCommand()

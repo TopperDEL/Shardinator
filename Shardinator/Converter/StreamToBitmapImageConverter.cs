@@ -12,6 +12,10 @@ public class StreamToBitmapImageConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, string language)
     {
+        if(value == null)
+        {
+            return null;
+        }
         var stream = (Stream)value;
         var image = new BitmapImage();
         image.SetSource(stream.AsRandomAccessStream());
