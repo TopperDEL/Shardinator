@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Common" />
     <PackageReference Include="MvvmGen" />
     <PackageReference Include="Uno.WinUI" />
     <PackageReference Include="Uno.Resizetizer" />
@@ -34,7 +33,16 @@
     <PackageReference Include="uplink.NET" />
   </ItemGroup>
 
-
+<!-- Include the Community Toolkit -->
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+		<PackageReference Include="CommunityToolkit.Common"/>
+		<PackageReference Include="CommunityToolkit.WinUI.UI"/>
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
+		<PackageReference Include="Uno.CommunityToolkit.Common"/>
+		<PackageReference Include="Uno.CommunityToolkit.WinUI.UI"/>
+	</ItemGroup>
+	
   <Choose>
     <When Condition="$(IsWinAppSdk)">
       <PropertyGroup>
@@ -81,9 +89,5 @@
     <EmbeddedResource Include="appsettings.json" />
     <EmbeddedResource Include="appsettings.*.json" DependentUpon="appsettings.json" />
     <UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows10.0.19041'">
-    <PackageReference Include="CommunityToolkit.WinUI.UI" />
   </ItemGroup>
 </Project>
