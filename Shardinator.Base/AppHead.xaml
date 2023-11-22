@@ -14,6 +14,7 @@
       </ResourceDictionary.MergedDictionaries>
 
       <conv:StreamToBitmapImageConverter x:Key="StreamToBitmapImageConverter"/>
+      <conv:StreamToLazyBitmapImageConverter x:Key="StreamToLazyBitmapImageConverter"/>
       <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
       <conv:BooleanToInvertedVisibilityConverter x:Key="BooleanToInvertedVisibilityConverter"/>
     </ResourceDictionary>

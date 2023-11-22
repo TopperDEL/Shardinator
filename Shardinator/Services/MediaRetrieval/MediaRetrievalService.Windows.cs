@@ -37,7 +37,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                         Type = MediaReferenceTypes.Image,
                         Path = image,
                         CreationDate = File.GetCreationTime(image),
-                        ThumbnailStream = (await storageFile.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem)).AsStream()
+                        ThumbnailStream = (await storageFile.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem)).AsStream(),
+                        MediaStream = File.OpenRead(image)
                     };
                     result.Add(media);
                     OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));
@@ -67,7 +68,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                     Name = Path.GetFileName(video),
                     Type = MediaReferenceTypes.Video,
                     Path = video,
-                    CreationDate = File.GetCreationTime(video)
+                    CreationDate = File.GetCreationTime(video),
+                    MediaStream = File.OpenRead(video)
                 };
                 result.Add(media);
                 OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));

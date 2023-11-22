@@ -8,4 +8,5 @@ namespace Shardinator.DataContracts.Models;
 public class GalleryEntry
 {
     public string Key { get; set; }
+    public Stream ThumbnailStream { get; set; }
 }
