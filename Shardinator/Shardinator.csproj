@@ -91,4 +91,10 @@
     <EmbeddedResource Include="appsettings.*.json" DependentUpon="appsettings.json" />
     <UpToDateCheckInput Include="**\*.xaml" Exclude="bin\**\*.xaml;obj\**\*.xaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\placeholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

@@ -58,10 +58,11 @@
       </PivotItem>
 
       <PivotItem Header="Cloud-Gallery" Tag="Gallery" Margin="10" MaxWidth="700">
-        <GridView ItemsSource="{Binding Gallery.Collection, Mode=OneWay}">
+        <GridView ItemsSource="{Binding Gallery.Collection, Mode=OneWay}" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
           <GridView.ItemTemplate>
             <DataTemplate>
               <Grid CornerRadius="0,10,0,10">
+                <Image Source="ms-appx:///Shardinator/Assets/placeholder.png" Height="150" Width="150" Stretch="UniformToFill"/>
                 <Image Source="{Binding Key, Converter={StaticResource StreamToLazyBitmapImageConverter}, Mode=OneWay}" Height="150" Width="150" Stretch="UniformToFill"/>
               </Grid>
             </DataTemplate>
