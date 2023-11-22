@@ -12,6 +12,7 @@ using uplink.NET.Services;
 namespace Shardinator.Services.Shardination;
 public class ShardinatorService : IShardinatorService
 {
+    public const string THUMB_PREFIX = "thumb/";
     private readonly ILocalSecretsStore _localSecretsStore;
     private CancellationToken _token;
 
@@ -28,7 +29,7 @@ public class ShardinatorService : IShardinatorService
             string mediaType = media.Type.ToString();
             string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
 
-            var thumbnailShardinated = await ShardinateAsync("thumb/" + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType);
+            var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType);
             if (thumbnailShardinated)
             {
                 var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType);

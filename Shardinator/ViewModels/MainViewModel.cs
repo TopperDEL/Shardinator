@@ -1,7 +1,10 @@
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Caching.Memory;
 using MvvmGen;
+using Shardinator.Converter;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
+using Shardinator.Helper;
 
 namespace Shardinator.ViewModels;
 
@@ -13,6 +16,8 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IShardinatorService))]
 [Inject(typeof(IDispatcher))]
 [Inject(typeof(IGalleryService))]
+[Inject(typeof(ILocalSecretsStore))]
+[Inject(typeof(IMemoryCache))]
 public partial class MainViewModel
 {
     [Property] private bool _isShardinating;
@@ -27,6 +32,8 @@ public partial class MainViewModel
         _ = LoadMediaAsync();
 
         Gallery = new GalleryViewModel(GalleryService);
+
+        _ = StreamToLazyBitmapImageConverter.InitAsync(LocalSecretsStore, Dispatcher, MemoryCache);
     }
 
     private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
@@ -37,14 +44,14 @@ public partial class MainViewModel
     CancellationTokenSource _cancellationSource;
 
     [Command]
-    private async Task Shardinate()
+    private void Shardinate()
     {
         _cancellationSource = new CancellationTokenSource();
         var token = _cancellationSource.Token;
-        _ = Shardinate(token);
+        _ = ShardinateAsync(token);
     }
 
-    private async Task Shardinate(CancellationToken cancellationToken)
+    private async Task ShardinateAsync(CancellationToken cancellationToken)
     {
         IsShardinating = true;
 
@@ -76,7 +83,7 @@ public partial class MainViewModel
     }
 
     [Command]
-    private async Task StopShardinate()
+    private void StopShardinate()
     {
         IsCancelling = true;
         _cancellationSource.Cancel();

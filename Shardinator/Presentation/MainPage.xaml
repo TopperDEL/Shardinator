@@ -10,7 +10,7 @@
       xmlns:uer="using:Uno.Extensions.Reactive.UI">
 
   <Grid utu:SafeArea.Insets="VisibleBounds">
-    <Pivot>
+    <Pivot SelectionChanged="Pivot_SelectionChanged">
       <PivotItem Header="Shardination">
         <Grid>
           <Grid.RowDefinitions>
@@ -57,7 +57,16 @@
         </Grid>
       </PivotItem>
 
-      <PivotItem Header="Cloud-Gallery">
+      <PivotItem Header="Cloud-Gallery" Tag="Gallery" Margin="10" MaxWidth="700">
+        <GridView ItemsSource="{Binding Gallery.Collection, Mode=OneWay}">
+          <GridView.ItemTemplate>
+            <DataTemplate>
+              <Grid CornerRadius="0,10,0,10">
+                <Image Source="{Binding Key, Converter={StaticResource StreamToLazyBitmapImageConverter}, Mode=OneWay}" Height="150" Width="150" Stretch="UniformToFill"/>
+              </Grid>
+            </DataTemplate>
+          </GridView.ItemTemplate>
+        </GridView>
       </PivotItem>
     </Pivot>
   </Grid>

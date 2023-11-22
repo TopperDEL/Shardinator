@@ -15,11 +15,14 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IGalleryService))]
 public partial class GalleryViewModel
 {
-    private IncrementalLoadingCollection<GallerySource, GalleryEntry> _galleryCollection;
+    [Property] private IncrementalLoadingCollection<GallerySource, GalleryEntry> _collection = new IncrementalLoadingCollection<GallerySource, GalleryEntry>();
 
 
     [Command]
     private async Task Refresh()
     {
+        var newKeys = await GalleryService.GetGalleryKeysAsync();
+        GallerySource.Refresh(newKeys);
+        Collection = new IncrementalLoadingCollection<GallerySource, GalleryEntry>();
     }
 }

@@ -10,11 +10,12 @@ namespace Shardinator.Helper
 {
     public class GallerySource : IIncrementalSource<GalleryEntry>
     {
-        private readonly List<string> _elementKeys;
+        private static readonly List<string> _elementKeys = new List<string>();
 
-        public GallerySource()
+        public static void Refresh(List<string> newElementKeys)
         {
-            _elementKeys = new List<string>();
+            _elementKeys.Clear();
+            _elementKeys.AddRange(newElementKeys);
         }
 
         public async Task<IEnumerable<GalleryEntry>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
@@ -22,11 +23,12 @@ namespace Shardinator.Helper
             List<GalleryEntry> result = new List<GalleryEntry>();
 
             var keys = (from p in _elementKeys
-                          select p).Skip(pageIndex * pageSize).Take(pageSize);
+                        select p).Skip(pageIndex * pageSize).Take(pageSize);
 
-            foreach(var key in keys)
+            foreach (var key in keys)
             {
-                result.Add(new GalleryEntry());
+                var galleryEntry = new GalleryEntry { Key = key };
+                result.Add(galleryEntry);
             }
 
             return result;

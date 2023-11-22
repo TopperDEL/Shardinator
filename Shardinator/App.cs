@@ -66,6 +66,7 @@ public class App : Application
                     services.AddSingleton<ILocalSecretsStore, LocalSecretsStore>();
                     services.AddSingleton<IShardinatorService, ShardinatorService>();
                     services.AddSingleton<IGalleryService, GalleryService>();
+                    services.AddMemoryCache();
                 })
                 .UseNavigation(RegisterRoutes)
             );
