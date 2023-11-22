@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Shardinator.Services.Authentication;
+using uplink.NET.Models;
 using uplink.NET.Services;
 
 namespace Shardinator.Services.Shardination;
@@ -24,12 +25,13 @@ public class ShardinatorService : IShardinatorService
         _token = cancellationToken;
         try
         {
+            string mediaType = media.Type.ToString();
             string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
 
-            var thumbnailShardinated = await ShardinateAsync("thumb/" + targetPath.Replace("mp4", "png"), media.ThumbnailStream);
+            var thumbnailShardinated = await ShardinateAsync("thumb/" + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType);
             if (thumbnailShardinated)
             {
-                var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream);
+                var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType);
                 if (!fileShardinated)
                 {
                     return false;
@@ -53,15 +55,17 @@ public class ShardinatorService : IShardinatorService
         }
     }
 
-    private async Task<bool> ShardinateAsync(string targetPath, Stream fileData)
+    private async Task<bool> ShardinateAsync(string targetPath, Stream fileData, string mediaType)
     {
+        CustomMetadata customMetadata = new CustomMetadata();
+        customMetadata.Entries.Add(new CustomMetadataEntry { Key = "MediaType", Value = mediaType });
         fileData.Position = 0;
-        using (uplink.NET.Models.Access access = new uplink.NET.Models.Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
+        using (Access access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
         {
             var bucketService = new BucketService(access);
             var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
             var objectService = new ObjectService(access);
-            var upload = await objectService.UploadObjectAsync(bucket, targetPath, new uplink.NET.Models.UploadOptions(), fileData, false).ConfigureAwait(false);
+            var upload = await objectService.UploadObjectAsync(bucket, targetPath, new UploadOptions(), fileData, customMetadata, false).ConfigureAwait(false);
             upload.UploadOperationProgressChanged += Upload_UploadOperationProgressChanged;
             if (!_token.IsCancellationRequested)
             {
@@ -77,7 +81,7 @@ public class ShardinatorService : IShardinatorService
         return true;
     }
 
-    private void Upload_UploadOperationProgressChanged(uplink.NET.Models.UploadOperation uploadOperation)
+    private void Upload_UploadOperationProgressChanged(UploadOperation uploadOperation)
     {
         if (_token != null && _token.IsCancellationRequested)
         {

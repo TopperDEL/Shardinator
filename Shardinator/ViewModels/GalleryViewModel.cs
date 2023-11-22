@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MvvmGen;
 using Shardinator.DataContracts.Interfaces;
+using Shardinator.DataContracts.Models;
+using Shardinator.Helper;
+using CommunityToolkit.WinUI;
 
 namespace Shardinator.ViewModels;
 
@@ -12,5 +15,11 @@ namespace Shardinator.ViewModels;
 [Inject(typeof(IGalleryService))]
 public partial class GalleryViewModel
 {
+    private IncrementalLoadingCollection<GallerySource, GalleryEntry> _galleryCollection;
 
+
+    [Command]
+    private async Task Refresh()
+    {
+    }
 }
