@@ -9,3 +9,6 @@ The Shardinator uses [Storj](https://storj.io) to store your files. It is a dist
 
 # What does it cost?
 Shardinator is free and Open Source! You only pay for the storage and bandwith you use. You get 25 GB for free if you [make an account on Storj](https://storj.io/signup)! After you've used the free quota you pay $0.004 per GiB for storing your files. If you download them again you pay $0.007 per GiB for egress bandwith - 25GB per month are free, too.
+
+# Current state
+The app is under heavy development! You may build it yourself using Visual Studio 2022 and .Net 8. Expect bugs and glitches! PR's and contributions are welcome!
