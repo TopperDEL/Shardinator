@@ -63,6 +63,7 @@ public class ShardinatorService : IShardinatorService
         fileData.Position = 0;
         using (Access access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
         {
+            //ToDo: Check Disposing
             var bucketService = new BucketService(access);
             var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
             var objectService = new ObjectService(access);
