@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Shardinator.Services.Authentication;
+using uplink.NET.Interfaces;
 using uplink.NET.Models;
 using uplink.NET.Services;
 
@@ -26,27 +27,40 @@ public class ShardinatorService : IShardinatorService
         _token = cancellationToken;
         try
         {
-            string mediaType = media.Type.ToString();
-            string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
-
-            var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType);
-            if (thumbnailShardinated)
+            using (Access access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
             {
-                var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType);
-                if (!fileShardinated)
+                var bucketService = new BucketService(access);
+                using (var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false))
                 {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+                    var objectService = new ObjectService(access);
 
-            if (!_token.IsCancellationRequested)
-            {
-                File.Delete(media.Path);
-                return true;
+                    string mediaType = media.Type.ToString();
+                    string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
+
+                    var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType, objectService, bucket);
+                    if (thumbnailShardinated)
+                    {
+                        var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType, objectService, bucket);
+                        if (!fileShardinated)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    if (!_token.IsCancellationRequested)
+                    {
+                        var objectInfo = await objectService.GetObjectAsync(bucket, targetPath);
+                        if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
+                        {
+                            File.Delete(media.Path);
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }
@@ -56,27 +70,21 @@ public class ShardinatorService : IShardinatorService
         }
     }
 
-    private async Task<bool> ShardinateAsync(string targetPath, Stream fileData, string mediaType)
+    private async Task<bool> ShardinateAsync(string targetPath, Stream fileData, string mediaType, IObjectService objectService, Bucket bucket)
     {
         CustomMetadata customMetadata = new CustomMetadata();
         customMetadata.Entries.Add(new CustomMetadataEntry { Key = "MediaType", Value = mediaType });
         fileData.Position = 0;
-        using (Access access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
-        {
-            //ToDo: Check Disposing
-            var bucketService = new BucketService(access);
-            var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
-            var objectService = new ObjectService(access);
-            var upload = await objectService.UploadObjectAsync(bucket, targetPath, new UploadOptions(), fileData, customMetadata, false).ConfigureAwait(false);
-            upload.UploadOperationProgressChanged += Upload_UploadOperationProgressChanged;
-            if (!_token.IsCancellationRequested)
-            {
-                await upload.StartUploadAsync().ConfigureAwait(false);
 
-                if (!upload.Completed)
-                {
-                    return false;
-                }
+        var upload = await objectService.UploadObjectAsync(bucket, targetPath, new UploadOptions(), fileData, customMetadata, false).ConfigureAwait(false);
+        upload.UploadOperationProgressChanged += Upload_UploadOperationProgressChanged;
+        if (!_token.IsCancellationRequested)
+        {
+            await upload.StartUploadAsync().ConfigureAwait(false);
+
+            if (!upload.Completed)
+            {
+                return false;
             }
         }
 
