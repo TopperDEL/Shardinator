@@ -51,23 +51,29 @@ public class StreamToLazyBitmapImageConverter : IValueConverter
 
     private async Task LoadImageAsync(string key, BitmapImage image)
     {
-        var objectInfo = await _objectService.GetObjectAsync(_bucket, key);
-        if (objectInfo.SystemMetadata.ContentLength > 0)
+        try
         {
-            var bytes = _memoryCache.Get<byte[]>(key);
-            if (bytes == null)
+            var objectInfo = await _objectService.GetObjectAsync(_bucket, key);
+            if (objectInfo.SystemMetadata.ContentLength > 0)
             {
-                using (var downloadOperation = await _objectService.DownloadObjectAsync(_bucket, key, new DownloadOptions(), false))
+                var bytes = _memoryCache.Get<byte[]>(key);
+                if (bytes == null)
                 {
-                    await downloadOperation.StartDownloadAsync();
-                    if (downloadOperation.Completed)
+                    using (var downloadOperation = await _objectService.DownloadObjectAsync(_bucket, key, new DownloadOptions(), false))
                     {
-                        _memoryCache.Set(key, downloadOperation.DownloadedBytes, DateTime.Now.AddMinutes(10));
-                        bytes = downloadOperation.DownloadedBytes;
+                        await downloadOperation.StartDownloadAsync();
+                        if (downloadOperation.Completed)
+                        {
+                            _memoryCache.Set(key, downloadOperation.DownloadedBytes, DateTime.Now.AddMinutes(10));
+                            bytes = downloadOperation.DownloadedBytes;
+                        }
                     }
                 }
+                _dispatcher.TryEnqueue(() => image.SetSourceAsync(new MemoryStream(bytes).AsRandomAccessStream()));
             }
-            _dispatcher.TryEnqueue(() => image.SetSourceAsync(new MemoryStream(bytes).AsRandomAccessStream()));
+        }
+        catch
+        {
         }
     }
 
