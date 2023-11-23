@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2ee73492397e4add859462c39225e8b7)](https://app.codacy.com/gh/TopperDEL/Shardinator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 # Shardinator
 Shardinator - Pics in the cloud, privacy in your hands!
 
