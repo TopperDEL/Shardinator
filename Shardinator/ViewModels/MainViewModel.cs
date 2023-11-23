@@ -23,6 +23,7 @@ namespace Shardinator.ViewModels;
 public partial class MainViewModel
 {
     [Property] private bool _isShardinating;
+    [Property] private bool _canEditSettings = true;
     [Property] private bool _isCancelling;
     [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
     [Property] private GalleryViewModel _gallery;
@@ -30,6 +31,7 @@ public partial class MainViewModel
     [Property] private bool _showGallery;
     [Property] private bool _showSettings;
     [Property] private int _selectedRegionIndex = 0;
+    [Property] private int _shardinationDays = 365;
 
     partial void OnInitialize()
     {
@@ -60,6 +62,7 @@ public partial class MainViewModel
     private async Task ShardinateAsync(CancellationToken cancellationToken)
     {
         IsShardinating = true;
+        CanEditSettings = false;
 
         try
         {
@@ -85,6 +88,7 @@ public partial class MainViewModel
         {
             IsShardinating = false;
             IsCancelling = false;
+            CanEditSettings = true;
         }
     }
 
@@ -100,9 +104,10 @@ public partial class MainViewModel
         await MediaRetrievalService.GetMediaReferencesAsync();
     }
 
-    public async ValueTask Logout(CancellationToken token)
+    [Command]
+    public async Task Logout()
     {
-        await AuthenticationService.LogoutAsync(token);
+        await AuthenticationService.LogoutAsync(null);
     }
 
     public void ActiveRegionChanged()

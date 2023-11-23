@@ -74,7 +74,16 @@
 
     <Grid Grid.Row="0" Visibility="{Binding ShowSettings, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
            Margin="10">
-      <TextBlock Text="Settings"/>
+      <StackPanel Orientation="Vertical" Margin="10">
+        <TextBlock Text="Shardinate media older than X days:"/>
+        <StackPanel Orientation="Horizontal">
+          <NumberBox PlaceholderText="Number of days" Value="{Binding ShardinationDays, Mode=TwoWay}" IsEnabled="{Binding CanEditSettings, Mode=OneWay}"
+                   MaxWidth="100" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+          <TextBlock Text="(Stop Shardination to edit the value)" Visibility="{Binding IsShardinating, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, Mode=OneWay}" Foreground="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="0,30" IsEnabled="{Binding CanEditSettings, Mode=OneWay}"/>
+      </StackPanel>
     </Grid>
 
     <utu:TabBar Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectedIndex="{Binding SelectedRegionIndex, Mode=TwoWay}" Width="500"

@@ -56,7 +56,7 @@ public class ShardinatorService : IShardinatorService
                         var objectInfo = await objectService.GetObjectAsync(bucket, targetPath);
                         if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
                         {
-                            File.Delete(media.Path);
+                            //File.Delete(media.Path);
                             return true;
                         }
                     }
