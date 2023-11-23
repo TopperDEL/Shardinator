@@ -58,7 +58,7 @@
       </PivotItem>
 
       <PivotItem Header="Cloud-Gallery" Tag="Gallery" Margin="10" MaxWidth="700">
-        <GridView ItemsSource="{Binding Gallery.Collection, Mode=OneWay}" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <GridView ItemsSource="{Binding Gallery.Collection, Mode=OneWay}">
           <GridView.ItemTemplate>
             <DataTemplate>
               <Grid CornerRadius="0,10,0,10">

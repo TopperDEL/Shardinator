@@ -53,11 +53,11 @@ public class StreamToLazyBitmapImageConverter : IValueConverter
     {
         try
         {
-            var objectInfo = await _objectService.GetObjectAsync(_bucket, key);
-            if (objectInfo.SystemMetadata.ContentLength > 0)
+            var bytes = _memoryCache.Get<byte[]>(key);
+            if (bytes == null)
             {
-                var bytes = _memoryCache.Get<byte[]>(key);
-                if (bytes == null)
+                var objectInfo = await _objectService.GetObjectAsync(_bucket, key);
+                if (objectInfo.SystemMetadata.ContentLength > 0)
                 {
                     using (var downloadOperation = await _objectService.DownloadObjectAsync(_bucket, key, new DownloadOptions(), false))
                     {
@@ -69,7 +69,21 @@ public class StreamToLazyBitmapImageConverter : IValueConverter
                         }
                     }
                 }
-                _dispatcher.TryEnqueue(() => image.SetSourceAsync(new MemoryStream(bytes).AsRandomAccessStream()));
+            }
+
+            if (bytes != null)
+            {
+                _dispatcher.TryEnqueue(async () =>
+                {
+                    try
+                    {
+                        await image.SetSourceAsync(new MemoryStream(bytes).AsRandomAccessStream());
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
+                });
             }
         }
         catch
