@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
     <PackageReference Include="MvvmGen" />
     <PackageReference Include="Uno.WinUI" />

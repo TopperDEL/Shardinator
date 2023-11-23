@@ -9,11 +9,11 @@ public sealed partial class MainPage : Page
         this.InitializeComponent();
     }
 
-    private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void Segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (this.DataContext != null && this.DataContext is MainViewModel mainViewModel)
         {
-            mainViewModel.Gallery.RefreshCommand.Execute(null);
+            mainViewModel.ActiveRegionChanged();
         }
     }
 }

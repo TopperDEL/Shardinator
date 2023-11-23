@@ -26,6 +26,10 @@ public partial class MainViewModel
     [Property] private bool _isCancelling;
     [Property] private ObservableCollection<MediaReference> _images = new ObservableCollection<MediaReference>();
     [Property] private GalleryViewModel _gallery;
+    [Property] private bool _showShardination = true;
+    [Property] private bool _showGallery;
+    [Property] private bool _showSettings;
+    [Property] private int _selectedRegionIndex = 0;
 
     partial void OnInitialize()
     {
@@ -99,5 +103,28 @@ public partial class MainViewModel
     public async ValueTask Logout(CancellationToken token)
     {
         await AuthenticationService.LogoutAsync(token);
+    }
+
+    public void ActiveRegionChanged()
+    {
+        if(SelectedRegionIndex == 0)
+        {
+            ShowShardination = true;
+            ShowGallery = false;
+            ShowSettings = false;
+        }
+        else if (SelectedRegionIndex == 1)
+        {
+            ShowShardination = false;
+            ShowGallery = true;
+            ShowSettings = false;
+            Gallery.RefreshCommand.Execute(null);
+        }
+        else if (SelectedRegionIndex == 2)
+        {
+            ShowShardination = false;
+            ShowGallery = false;
+            ShowSettings = true;
+        }
     }
 }
