@@ -1,4 +1,7 @@
 # Shardinator
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e5816defdf11444e8184c4591defdd80)](https://app.codacy.com/gh/TopperDEL/Shardinator?utm_source=github.com&utm_medium=referral&utm_content=TopperDEL/Shardinator&utm_campaign=Badge_Grade)
+
 Shardinator - Pics in the cloud, privacy in your hands!
 
 ![ShardinateSmall](https://github.com/TopperDEL/Shardinator/assets/1833242/d4e5de15-e0f6-43d4-966f-26bacc834700)
