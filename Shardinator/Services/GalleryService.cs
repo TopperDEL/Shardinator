@@ -21,20 +21,27 @@ public class GalleryService : IGalleryService
 
     public async Task<List<string>> GetGalleryKeysAsync()
     {
-        var bucketName = _localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET);
-        var accessGrant = _localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT);
-        var bucketService = new BucketService(new uplink.NET.Models.Access(accessGrant));
-        var objectService = new ObjectService(new uplink.NET.Models.Access(accessGrant));
-
-        var bucket = await bucketService.GetBucketAsync(bucketName);
-        var thumbnailEntries = await objectService.ListObjectsAsync(bucket, new uplink.NET.Models.ListObjectsOptions { Prefix = ShardinatorService.THUMB_PREFIX, Recursive = true });
-
-        var result = new List<string>();
-        foreach (var thumbnailEntry in thumbnailEntries.Items)
+        try
         {
-            result.Add(thumbnailEntry.Key);
-        }
+            var bucketName = _localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET);
+            var accessGrant = _localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT);
+            var bucketService = new BucketService(new uplink.NET.Models.Access(accessGrant));
+            var objectService = new ObjectService(new uplink.NET.Models.Access(accessGrant));
 
-        return result;
+            var bucket = await bucketService.GetBucketAsync(bucketName);
+            var thumbnailEntries = await objectService.ListObjectsAsync(bucket, new uplink.NET.Models.ListObjectsOptions { Prefix = ShardinatorService.THUMB_PREFIX, Recursive = true });
+
+            var result = new List<string>();
+            foreach (var thumbnailEntry in thumbnailEntries.Items)
+            {
+                result.Add(thumbnailEntry.Key);
+            }
+
+            return result;
+        }
+        catch
+        {
+            return new List<string>();
+        }
     }
 }
