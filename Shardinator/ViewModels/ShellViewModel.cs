@@ -1,7 +1,9 @@
+using System.ComponentModel;
 using MvvmGen;
 
 namespace Shardinator.ViewModels;
 
+[Bindable(BindableSupport.Default)]
 [ViewModel]
 [Inject(typeof(INavigator))]
 [Inject(typeof(IAuthenticationService))]

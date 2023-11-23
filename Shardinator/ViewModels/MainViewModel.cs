@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Microsoft.Extensions.Caching.Memory;
 using MvvmGen;
 using Shardinator.Converter;
@@ -8,6 +9,7 @@ using Shardinator.Helper;
 
 namespace Shardinator.ViewModels;
 
+[Bindable(BindableSupport.Default)]
 [ViewModel]
 [Inject(typeof(INavigator))]
 [Inject(typeof(IStringLocalizer))]

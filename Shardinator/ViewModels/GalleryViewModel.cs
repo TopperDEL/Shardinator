@@ -8,9 +8,11 @@ using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Shardinator.Helper;
 using CommunityToolkit.WinUI;
+using System.ComponentModel;
 
 namespace Shardinator.ViewModels;
 
+[Bindable(BindableSupport.Default)]
 [ViewModel]
 [Inject(typeof(IGalleryService))]
 public partial class GalleryViewModel
