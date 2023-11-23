@@ -75,14 +75,8 @@ public class StreamToLazyBitmapImageConverter : IValueConverter
             {
                 _dispatcher.TryEnqueue(async () =>
                 {
-                    try
-                    {
-                        await image.SetSourceAsync(new MemoryStream(bytes).AsRandomAccessStream());
-                    }
-                    catch(Exception ex)
-                    {
-
-                    }
+                    var stream = new MemoryStream(bytes).AsRandomAccessStream();
+                    await image.SetSourceAsync(stream);
                 });
             }
         }
