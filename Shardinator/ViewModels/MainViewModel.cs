@@ -31,15 +31,16 @@ public partial class MainViewModel
     [Property] private bool _showGallery;
     [Property] private bool _showSettings;
     [Property] private int _selectedRegionIndex = 0;
-    [Property] private int _shardinationDays = 365;
+    [Property] private int _shardinationDays;
 
     partial void OnInitialize()
     {
         MediaRetrievalService.OnMediaReferenceLoaded += MediaRetrievalService_OnMediaReferenceLoaded;
 
-        _ = LoadMediaAsync();
-
         Gallery = new GalleryViewModel(GalleryService);
+
+        var savedShardinationDays = LocalSecretsStore.GetSecret("ShardinationDays");
+        ShardinationDays = string.IsNullOrEmpty(savedShardinationDays) ? 365 : int.Parse(savedShardinationDays);
 
         _ = StreamToLazyBitmapImageConverter.InitAsync(LocalSecretsStore, Dispatcher, MemoryCache);
     }
@@ -101,7 +102,7 @@ public partial class MainViewModel
 
     private async Task LoadMediaAsync()
     {
-        await MediaRetrievalService.GetMediaReferencesAsync();
+        await MediaRetrievalService.GetMediaReferencesAsync(ShardinationDays);
     }
 
     [Command]
@@ -110,9 +111,18 @@ public partial class MainViewModel
         await AuthenticationService.LogoutAsync(null);
     }
 
+    public async Task SaveShardinationDaysAsync(double newValue)
+    {
+        ShardinationDays = (int)newValue;
+        LocalSecretsStore.SetSecret("ShardinationDays", ShardinationDays.ToString());
+
+        Images.Clear();
+        await LoadMediaAsync();
+    }
+
     public void ActiveRegionChanged()
     {
-        if(SelectedRegionIndex == 0)
+        if (SelectedRegionIndex == 0)
         {
             ShowShardination = true;
             ShowGallery = false;

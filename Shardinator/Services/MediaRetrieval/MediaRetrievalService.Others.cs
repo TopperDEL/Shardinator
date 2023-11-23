@@ -10,7 +10,7 @@ using Shardinator.DataContracts.Models;
 namespace Shardinator.Services.MediaRetrieval;
 public partial class MediaRetrievalService : IMediaRetrievalService
 {
-    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(CancellationToken? cancelToken = null)
+    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(int shardinationDays,CancellationToken? cancelToken = null)
     {
         var result = new List<MediaReference>();
         return result;

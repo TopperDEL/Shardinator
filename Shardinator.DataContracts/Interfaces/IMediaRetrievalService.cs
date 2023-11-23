@@ -20,5 +20,5 @@ public interface IMediaRetrievalService
     event EventHandler<MediaEventArgs> OnMediaReferenceLoaded;
     bool IsLoading { get; }
 
-    Task<IList<MediaReference>> GetMediaReferencesAsync(CancellationToken? cancelToken = null);
+    Task<IList<MediaReference>> GetMediaReferencesAsync(int shardinationDays, CancellationToken? cancelToken = null);
 }

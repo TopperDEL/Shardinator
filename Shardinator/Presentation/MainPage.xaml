@@ -77,8 +77,8 @@
       <StackPanel Orientation="Vertical" Margin="10">
         <TextBlock Text="Shardinate media older than X days:"/>
         <StackPanel Orientation="Horizontal">
-          <NumberBox PlaceholderText="Number of days" Value="{Binding ShardinationDays, Mode=TwoWay}" IsEnabled="{Binding CanEditSettings, Mode=OneWay}"
-                   MaxWidth="100" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+          <NumberBox PlaceholderText="Number of days" Value="{Binding ShardinationDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEditSettings, Mode=OneWay}"
+                   MaxWidth="100" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" ValueChanged="NumberBox_ValueChanged"/>
           <TextBlock Text="(Stop Shardination to edit the value)" Visibility="{Binding IsShardinating, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, Mode=OneWay}" Foreground="LightGray" VerticalAlignment="Center"/>
         </StackPanel>
 

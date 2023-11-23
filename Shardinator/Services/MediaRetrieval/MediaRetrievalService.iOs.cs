@@ -19,7 +19,7 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 {
     bool requestStop = false;
 
-    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(CancellationToken? cancelToken = null)
+    public async Task<IList<MediaReference>> NativeGetMediaReferencesAsync(int shardinationDays, CancellationToken? cancelToken = null)
     {
         requestStop = false;
 

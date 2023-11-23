@@ -16,4 +16,12 @@ public sealed partial class MainPage : Page
             mainViewModel.ActiveRegionChanged();
         }
     }
+
+    private async void NumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (this.DataContext != null && this.DataContext is MainViewModel mainViewModel)
+        {
+            await mainViewModel.SaveShardinationDaysAsync(args.NewValue);
+        }
+    }
 }
