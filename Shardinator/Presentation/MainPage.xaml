@@ -15,7 +15,8 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0" Visibility="{Binding ShowShardination, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
+    <Grid Grid.Row="0" Visibility="{Binding ShowShardination, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}"
+          Margin="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition />
@@ -33,7 +34,7 @@
           </StackPanel>
         </Grid>
       </Button>
-      <ListView Grid.Row="1" ItemsSource="{Binding Images}" Margin="10">
+      <ListView Grid.Row="1" ItemsSource="{Binding Images}">
         <ListView.ItemTemplate>
           <DataTemplate>
             <Grid Margin="5">
