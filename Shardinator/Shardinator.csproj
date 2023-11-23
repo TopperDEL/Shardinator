@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" />
+	<PackageReference Include="CommunityToolkit.WinUI.Collections" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
     <PackageReference Include="MvvmGen" />
     <PackageReference Include="Uno.WinUI" />
@@ -35,15 +35,6 @@
     <PackageReference Include="uplink.NET" />
   </ItemGroup>
 
-<!-- Include the Community Toolkit -->
-	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
-		<PackageReference Include="CommunityToolkit.Common" />
-		<PackageReference Include="CommunityToolkit.WinUI.UI" />
-	</ItemGroup>
-	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'">
-		<PackageReference Include="Uno.CommunityToolkit.Common" />
-		<PackageReference Include="Uno.CommunityToolkit.WinUI.UI" />
-	</ItemGroup>
 	
   <Choose>
     <When Condition="$(IsWinAppSdk)">

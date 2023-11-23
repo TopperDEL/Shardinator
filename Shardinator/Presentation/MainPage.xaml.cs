@@ -9,7 +9,7 @@ public sealed partial class MainPage : Page
         this.InitializeComponent();
     }
 
-    private void Segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void TabBar_SelectionChanged(Uno.Toolkit.UI.TabBar sender, Uno.Toolkit.UI.TabBarSelectionChangedEventArgs args)
     {
         if (this.DataContext != null && this.DataContext is MainViewModel mainViewModel)
         {

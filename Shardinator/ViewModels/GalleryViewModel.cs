@@ -7,8 +7,8 @@ using MvvmGen;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Shardinator.Helper;
-using CommunityToolkit.WinUI;
 using System.ComponentModel;
+using CommunityToolkit.WinUI.Collections;
 
 namespace Shardinator.ViewModels;
 

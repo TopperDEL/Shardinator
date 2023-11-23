@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shardinator.DataContracts.Models;
-using CommunityToolkit.Common.Collections;
+using CommunityToolkit.WinUI.Collections;
 
 namespace Shardinator.Helper
 {

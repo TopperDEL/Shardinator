@@ -4,8 +4,6 @@
       xmlns:local="using:Shardinator.Presentation"
       xmlns:uen="using:Uno.Extensions.Navigation.UI"
       xmlns:utu="using:Uno.Toolkit.UI"
-      xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-      xmlns:ui="using:CommunityToolkit.WinUI"
       xmlns:um="using:Uno.Material"
       NavigationCacheMode="Required"
       Background="{ThemeResource BackgroundBrush}"
@@ -77,12 +75,17 @@
            Margin="10">
       <TextBlock Text="Settings"/>
     </Grid>
-    
-    <controls:Segmented Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectedIndex="{Binding SelectedRegionIndex, Mode=TwoWay}"
-                        SelectionChanged="Segmented_SelectionChanged">
-      <controls:SegmentedItem Icon="{ui:FontIcon Glyph=&#xE898;}" MinWidth="100"/>
-      <controls:SegmentedItem Icon="{ui:FontIcon Glyph=&#xE753;}" MinWidth="100"/>
-      <controls:SegmentedItem Icon="{ui:FontIcon Glyph=&#xE713;}" MinWidth="100"/>
-    </controls:Segmented>
+
+    <utu:TabBar Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectedIndex="{Binding SelectedRegionIndex, Mode=TwoWay}" Width="500"
+                SelectionChanged="TabBar_SelectionChanged" SelectionIndicatorTransitionMode="Slide">
+      <utu:TabBar.SelectionIndicatorContent>
+        <Border Height="2"
+                VerticalAlignment="Bottom"
+                Background="{StaticResource AccentTextFillColorPrimaryBrush}" />
+      </utu:TabBar.SelectionIndicatorContent>
+      <utu:TabBarItem Icon="Home" Content="Home"/>
+      <utu:TabBarItem Icon="Pictures" Content="Gallery"/>
+      <utu:TabBarItem Icon="Setting" Content="Settings"/>
+    </utu:TabBar>
   </Grid>
 </Page>
