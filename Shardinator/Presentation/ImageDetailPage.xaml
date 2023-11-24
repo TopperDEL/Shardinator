@@ -24,9 +24,9 @@
       </utu:NavigationBar.MainCommand>
     </utu:NavigationBar>
 
-    <Image Grid.Row="1" Source="{Binding ImageThumbKey, Converter={StaticResource StringToLazyBitmapImageConverter}}" Stretch="UniformToFill"/>
+    <Image Grid.Row="1" Source="{Binding ImageThumbKey, Converter={StaticResource StringToLazyBitmapImageConverter}}" Stretch="Uniform"/>
     <!--<ScrollViewer Grid.Row="1" MinZoomFactor="1" DoubleTapped="scrollViewer_DoubleTapped" ZoomMode="Enabled">-->
-      <Image Grid.Row="1" Source="{Binding ImageKey, Converter={StaticResource StringToLazyBitmapImageConverter}}" Stretch="UniformToFill"/>
+      <Image Grid.Row="1" Source="{Binding ImageKey, Converter={StaticResource StringToLazyBitmapImageConverter}}" Stretch="Uniform"/>
     <!--</ScrollViewer>-->
   </Grid>
 </Page>
