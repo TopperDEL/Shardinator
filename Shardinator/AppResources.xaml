@@ -10,5 +10,13 @@
 
   </ResourceDictionary.MergedDictionaries>
   <!-- Add resources here -->
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Light">
+      <ImageSource x:Key="Shardinate">ms-appx:///Shardinator/Assets/ShardinateLight.png</ImageSource>
+    </ResourceDictionary>
 
+    <ResourceDictionary x:Key="Dark">
+      <ImageSource x:Key="Shardinate">ms-appx:///Shardinator/Assets/ShardinateDark.png</ImageSource>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

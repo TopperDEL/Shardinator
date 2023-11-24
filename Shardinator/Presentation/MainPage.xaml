@@ -83,6 +83,8 @@
         </StackPanel>
 
         <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="0,30" IsEnabled="{Binding CanEditSettings, Mode=OneWay}"/>
+
+        <Image Source="{ThemeResource Shardinate}" MaxWidth="400" HorizontalAlignment="Left"/>
       </StackPanel>
     </Grid>
 
