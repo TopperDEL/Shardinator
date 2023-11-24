@@ -16,55 +16,86 @@ public class ShardinatorService : IShardinatorService
     public const string THUMB_PREFIX = "thumb/";
     private readonly ILocalSecretsStore _localSecretsStore;
     private CancellationToken _token;
+    private Access _access;
+    private IBucketService _bucketService;
+    private IObjectService _objectService;
+    private Bucket _bucket;
+    private bool _isInitialized;
 
     public ShardinatorService(ILocalSecretsStore localSecretsStore)
     {
         _localSecretsStore = localSecretsStore;
     }
 
+    private async Task InitAsync()
+    {
+        if (_isInitialized)
+        {
+            return;
+        }
+        _access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT));
+        _bucketService = new BucketService(_access);
+        _bucket = await _bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false);
+        _objectService = new ObjectService(_access);
+
+        _isInitialized = true;
+    }
+
+    public void Clear()
+    {
+        if (_bucket != null)
+        {
+            _bucket.Dispose();
+            _bucket = null;
+        }
+
+        if (_access != null)
+        {
+            _access.Dispose();
+            _access = null;
+        }
+
+        _objectService = null;
+        _bucketService = null;
+        _isInitialized = false;
+    }
+
     public async Task<bool> ShardinateAsync(MediaReference media, CancellationToken cancellationToken)
     {
+        await InitAsync();
+
         _token = cancellationToken;
         try
         {
-            using (Access access = new Access(_localSecretsStore.GetSecret(StorjAuthenticationService.ACCESS_GRANT)))
+            string mediaType = media.Type.ToString();
+            string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
+
+            var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType, _objectService, _bucket);
+            if (thumbnailShardinated)
             {
-                var bucketService = new BucketService(access);
-                using (var bucket = await bucketService.GetBucketAsync(_localSecretsStore.GetSecret(StorjAuthenticationService.BUCKET)).ConfigureAwait(false))
+                var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType, _objectService, _bucket);
+                if (!fileShardinated)
                 {
-                    var objectService = new ObjectService(access);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
 
-                    string mediaType = media.Type.ToString();
-                    string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
-
-                    var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType, objectService, bucket);
-                    if (thumbnailShardinated)
-                    {
-                        var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType, objectService, bucket);
-                        if (!fileShardinated)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    if (!_token.IsCancellationRequested)
-                    {
-                        var objectInfo = await objectService.GetObjectAsync(bucket, targetPath);
-                        if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
-                        {
-                            File.Delete(media.Path);
-                            return true;
-                        }
-                    }
+            if (!_token.IsCancellationRequested)
+            {
+                var objectInfo = await _objectService.GetObjectAsync(_bucket, targetPath);
+                if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
+                {
+                    File.Delete(media.Path);
+                    return true;
                 }
             }
             return false;
         }
-        catch
+        catch (Exception ex)
         {
             return false;
         }

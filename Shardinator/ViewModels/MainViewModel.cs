@@ -82,6 +82,8 @@ public partial class MainViewModel
                 else
                 {
                     //Show error
+                    //Don't shardinate further
+                    return;
                 }
             }
         }
@@ -108,6 +110,7 @@ public partial class MainViewModel
     [Command]
     public async Task Logout()
     {
+        ShardinatorService.Clear();
         await AuthenticationService.LogoutAsync(null);
     }
 

@@ -9,4 +9,5 @@ namespace Shardinator.DataContracts.Interfaces;
 public interface IShardinatorService
 {
     Task<bool> ShardinateAsync(MediaReference media, CancellationToken cancellationToken);
+    void Clear();
 }
