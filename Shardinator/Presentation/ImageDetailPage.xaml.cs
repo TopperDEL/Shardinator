@@ -60,13 +60,8 @@ namespace Shardinator.Presentation
             else if (scrollViewer.ZoomFactor == 1)
             {
                 scrollViewer.ZoomToFactor(2);
-
-                //var dispatcher = App.Current.ServiceLocation().Get<IDispatcher>();
-                //await dispatcher.TryEnqueue(() =>
-                //{
                 scrollViewer.ScrollToHorizontalOffset(doubleTapPoint.X);
                 scrollViewer.ScrollToVerticalOffset(doubleTapPoint.Y);
-                //});
             }
         }
     }
