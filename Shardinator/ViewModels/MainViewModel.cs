@@ -146,7 +146,16 @@ public partial class MainViewModel
     [Command]
     private async Task ShowDetail(object param)
     {
-        string imageKey = param as string;
-        await Navigator.NavigateViewModelAsync<ImageDetailViewModel>(this, qualifier: Qualifiers.Dialog, data: imageKey);
+        string key = param as string;
+        if (key.ToLower().Contains("mp4"))
+        {
+#if !__ANDROID__
+            await Navigator.NavigateViewModelAsync<VideoDetailViewModel>(this, qualifier: Qualifiers.Dialog, data: key);
+#endif
+        }
+        else
+        {
+            await Navigator.NavigateViewModelAsync<ImageDetailViewModel>(this, qualifier: Qualifiers.Dialog, data: key);
+        }
     }
 }

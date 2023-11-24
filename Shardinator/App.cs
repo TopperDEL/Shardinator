@@ -98,7 +98,8 @@ public class App : Application
             new ViewMap(ViewModel: typeof(ShellViewModel)),
             new ViewMap<LoginPage, LoginViewModel>(),
             new ViewMap<MainPage, MainViewModel>(),
-            new ViewMap<ImageDetailPage, ImageDetailViewModel>()
+            new ViewMap<ImageDetailPage, ImageDetailViewModel>(),
+            new ViewMap<VideoDetailPage, VideoDetailViewModel>()
         );
 
         routes.Register(
@@ -108,6 +109,7 @@ public class App : Application
                     new RouteMap("Login", View: views.FindByViewModel<LoginViewModel>()),
                     new RouteMap("Main", View: views.FindByViewModel<MainViewModel>()),
                     new RouteMap("ImageDetail", View: views.FindByViewModel<ImageDetailViewModel>()),
+                    new RouteMap("VideoDetail", View: views.FindByViewModel<VideoDetailViewModel>()),
                 }
             )
         );

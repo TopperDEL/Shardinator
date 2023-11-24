@@ -86,10 +86,13 @@
 
   <ItemGroup>
     <None Remove="Presentation\ImageDetailPage.xaml" />
+    <None Remove="Presentation\MainPage.xaml~RF5a0bb2.TMP" />
+    <None Remove="Presentation\VideoDetailPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Presentation\ImageDetailPage.xaml" />
+    <UpToDateCheckInput Remove="Presentation\VideoDetailPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,5 +109,9 @@
 
   <ItemGroup>
     <AdditionalFiles Remove="Presentation\ImageDetailPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="Presentation\VideoDetailPage.xaml" />
   </ItemGroup>
 </Project>
