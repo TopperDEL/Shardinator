@@ -20,8 +20,8 @@ env:
   DOTNET_VERSION: 8.0.x
   XCODE_VERSION: 14.3
   DOTNET_VERSION_TARGETS: net8.0
-  CSPROJ_TO_BUILD: PATH_TO_PROJECT_FILE
-  PROJECT_FOLDER: PROJECT_FOLDER_NAME
+  CSPROJ_TO_BUILD: Shardinator.Mobile/Shardinator.Mobile.csproj
+  PROJECT_FOLDER: Shardinator
 
 jobs:
   vars:
