@@ -11,11 +11,9 @@ using Shardinator.Services.Authentication;
 using uplink.NET.Interfaces;
 using uplink.NET.Models;
 using uplink.NET.Services;
-using Windows.Networking.BackgroundTransfer;
-using Windows.Storage.Streams;
 
 namespace Shardinator.Converter;
-public class StreamToLazyBitmapImageConverter : IValueConverter
+public class StringToLazyBitmapImageConverter : IValueConverter
 {
     private static Bucket _bucket;
     private static IObjectService _objectService;

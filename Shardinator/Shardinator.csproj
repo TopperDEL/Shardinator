@@ -85,6 +85,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Presentation\ImageDetailPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Presentation\ImageDetailPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Assets\placeholder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -94,5 +102,9 @@
     <Content Update="Assets\ShardinateLight.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="Presentation\ImageDetailPage.xaml" />
   </ItemGroup>
 </Project>

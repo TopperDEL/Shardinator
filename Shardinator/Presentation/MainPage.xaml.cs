@@ -24,4 +24,13 @@ public sealed partial class MainPage : Page
             await mainViewModel.SaveShardinationDaysAsync(args.NewValue);
         }
     }
+
+    private void Image_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+    {
+        Image senderImage = sender as Image;
+        if (this.DataContext != null && this.DataContext is MainViewModel mainViewModel)
+        {
+            mainViewModel.ShowDetailCommand.Execute(senderImage.Tag as string);
+        }
+    }
 }

@@ -42,7 +42,7 @@ public partial class MainViewModel
         var savedShardinationDays = LocalSecretsStore.GetSecret("ShardinationDays");
         ShardinationDays = string.IsNullOrEmpty(savedShardinationDays) ? 365 : int.Parse(savedShardinationDays);
 
-        _ = StreamToLazyBitmapImageConverter.InitAsync(LocalSecretsStore, Dispatcher, MemoryCache);
+        _ = StringToLazyBitmapImageConverter.InitAsync(LocalSecretsStore, Dispatcher, MemoryCache);
     }
 
     private void MediaRetrievalService_OnMediaReferenceLoaded(object? sender, MediaEventArgs e)
@@ -141,5 +141,12 @@ public partial class MainViewModel
             ShowGallery = false;
             ShowSettings = true;
         }
+    }
+
+    [Command]
+    private async Task ShowDetail(object param)
+    {
+        string imageKey = param as string;
+        await Navigator.NavigateViewModelAsync<ImageDetailViewModel>(this, qualifier: Qualifiers.Dialog, data: imageKey);
     }
 }

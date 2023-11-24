@@ -9,6 +9,7 @@ using Shardinator.DataContracts.Models;
 using Shardinator.Helper;
 using System.ComponentModel;
 using CommunityToolkit.WinUI.Collections;
+using Uno.Extensions.Navigation;
 
 namespace Shardinator.ViewModels;
 
