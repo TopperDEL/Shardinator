@@ -63,8 +63,6 @@ public partial class MainViewModel
 
     private async Task ShardinateAsync(CancellationToken cancellationToken)
     {
-        await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: "Testnachricht");
-        return;
         IsShardinating = true;
         CanEditSettings = false;
 
