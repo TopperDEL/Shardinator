@@ -87,11 +87,13 @@
   <ItemGroup>
     <None Remove="Presentation\ImageDetailPage.xaml" />
     <None Remove="Presentation\MainPage.xaml~RF5a0bb2.TMP" />
+    <None Remove="Presentation\ShowErrorPage.xaml" />
     <None Remove="Presentation\VideoDetailPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Presentation\ImageDetailPage.xaml" />
+    <UpToDateCheckInput Remove="Presentation\ShowErrorPage.xaml" />
     <UpToDateCheckInput Remove="Presentation\VideoDetailPage.xaml" />
   </ItemGroup>
 
@@ -113,5 +115,9 @@
 
   <ItemGroup>
     <AdditionalFiles Remove="Presentation\VideoDetailPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="Presentation\ShowErrorPage.xaml" />
   </ItemGroup>
 </Project>

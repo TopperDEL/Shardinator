@@ -6,6 +6,7 @@ using Shardinator.Converter;
 using Shardinator.DataContracts.Interfaces;
 using Shardinator.DataContracts.Models;
 using Shardinator.Helper;
+using Uno;
 
 namespace Shardinator.ViewModels;
 
@@ -62,6 +63,8 @@ public partial class MainViewModel
 
     private async Task ShardinateAsync(CancellationToken cancellationToken)
     {
+        await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: "Testnachricht");
+        return;
         IsShardinating = true;
         CanEditSettings = false;
 
@@ -70,7 +73,7 @@ public partial class MainViewModel
             while (Images.Count > 0 && !cancellationToken.IsCancellationRequested)
             {
                 var shardinated = await ShardinatorService.ShardinateAsync(Images.First(), cancellationToken);
-                if (shardinated)
+                if (shardinated.Item1)
                 {
                     try
                     {
@@ -82,6 +85,7 @@ public partial class MainViewModel
                 else
                 {
                     //Show error
+                    await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: shardinated.Item2);
                     //Don't shardinate further
                     return;
                 }

@@ -60,7 +60,7 @@ public class ShardinatorService : IShardinatorService
         _isInitialized = false;
     }
 
-    public async Task<bool> ShardinateAsync(MediaReference media, CancellationToken cancellationToken)
+    public async Task<Tuple<bool, string>> ShardinateAsync(MediaReference media, CancellationToken cancellationToken)
     {
         await InitAsync();
 
@@ -76,12 +76,12 @@ public class ShardinatorService : IShardinatorService
                 var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType, _objectService, _bucket);
                 if (!fileShardinated)
                 {
-                    return false;
+                    return new Tuple<bool, string>(false, "Could not shardinate media");
                 }
             }
             else
             {
-                return false;
+                return new Tuple<bool, string>(false, "Could not shardinate thumbnail");
             }
 
             if (!_token.IsCancellationRequested)
@@ -90,14 +90,22 @@ public class ShardinatorService : IShardinatorService
                 if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
                 {
                     File.Delete(media.Path);
-                    return true;
+
+                    return new Tuple<bool, string>(true, "");
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Shardinated media has not the same content length - cancelling");
                 }
             }
-            return false;
+            else
+            {
+                return new Tuple<bool, string>(false, "Cancellation requested");
+            }
         }
         catch (Exception ex)
         {
-            return false;
+            return new Tuple<bool, string>(false, "Error occured: " + ex.Message);
         }
     }
 
