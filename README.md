@@ -14,3 +14,15 @@ Shardinator is free and Open Source! You only pay for the storage and bandwith y
 
 # Current state
 The app is under heavy development! You may build it yourself using Visual Studio 2022 and .Net 8. Expect bugs and glitches! PR's and contributions are welcome!
+
+# Troubleshooting Device Restarts
+If you encounter device restarts while using Shardinator on Android, you can use Android Debug Bridge (ADB) to retrieve crash logs which may provide insights into the issue. Follow these steps to get crash logs:
+1. Enable Developer Options on your Android device.
+2. Enable USB debugging within the Developer Options.
+3. Connect your device to a computer with ADB installed.
+4. Open a terminal or command prompt and type `adb logcat > crashlog.txt` to save the crash logs to a file.
+5. Reproduce the issue on your device.
+6. Press `Ctrl+C` in the terminal to stop logging.
+7. Review the `crashlog.txt` file for any errors or warnings that may indicate the cause of the restart.
+
+For more detailed instructions and troubleshooting tips, please refer to the documentation in `Shardinator/Documentation/TroubleshootingDeviceRestarts.md`.
