@@ -54,11 +54,11 @@ public partial class MainViewModel
     CancellationTokenSource _cancellationSource;
 
     [Command]
-    private void Shardinate()
+    private async Task Shardinate()
     {
         _cancellationSource = new CancellationTokenSource();
         var token = _cancellationSource.Token;
-        _ = ShardinateAsync(token);
+        await ShardinateAsync(token);
     }
 
     private async Task ShardinateAsync(CancellationToken cancellationToken)
@@ -75,19 +75,35 @@ public partial class MainViewModel
                 {
                     try
                     {
-                        Dispatcher.TryEnqueue(Images.Clear);
+                        // Ensure this part is run on the UI thread
+                        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(() =>
+                        {
+                            Images.RemoveAt(0);
+                        });
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        // Show error
+                        await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: ex.Message + shardinated.Item2);
+                        // Don't shardinate further
+                        return;
+                    }
+
                     await LoadMediaAsync();
                 }
                 else
                 {
-                    //Show error
+                    // Show error
                     await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: shardinated.Item2);
-                    //Don't shardinate further
+                    // Don't shardinate further
                     return;
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            // Show error
+            await Navigator.NavigateViewModelAsync<ErrorViewModel>(this, qualifier: Qualifiers.Dialog, data: ex.Message);
         }
         finally
         {
