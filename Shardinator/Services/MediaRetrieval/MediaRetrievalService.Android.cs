@@ -219,7 +219,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                         }
                         catch (Exception ex)
                         {
-                            //await UserDialogs.Instance.AlertAsync(ex.StackTrace.ToString(), "error", "ok");
+                            // Log the exception details for troubleshooting
+                            Android.Util.Log.Error("MediaRetrievalService", ex.ToString());
                         }
                     }
                 }

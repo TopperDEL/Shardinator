@@ -105,6 +105,8 @@ public class ShardinatorService : IShardinatorService
         }
         catch (Exception ex)
         {
+            // Enhanced error handling to avoid unhandled exceptions that could lead to system instability
+            Console.WriteLine($"Error during shardination: {ex.Message}");
             return new Tuple<bool, string>(false, "Error occured: " + ex.Message);
         }
     }
