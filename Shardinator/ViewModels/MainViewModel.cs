@@ -122,6 +122,7 @@ public partial class MainViewModel
 
     private async Task LoadMediaAsync()
     {
+        Images.Clear();
         await MediaRetrievalService.GetMediaReferencesAsync(ShardinationDays);
     }
 
