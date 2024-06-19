@@ -82,6 +82,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                     MediaStream = File.OpenRead(video),
                     Size = new FileInfo(video).Length
                 };
+                CalculateSizeInMB(media);
+
                 result.Add(media);
                 OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(media));
             }
