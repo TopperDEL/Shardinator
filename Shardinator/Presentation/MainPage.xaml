@@ -51,7 +51,7 @@
                 <TextBlock Text="Creation date" Foreground="DarkGray" FontWeight="Light" FontSize="10" Margin="0,10,0,2"/>
                 <TextBlock Text="{Binding CreationDate}"/>
                 <TextBlock Text="Size" Foreground="DarkGray" FontWeight="Light" FontSize="10" Margin="0,10,0,2"/>
-                <TextBlock Text="{Binding SizeInMB}" Margin="0,10"/>
+                <TextBlock Text="{Binding SizeInMB}"/>
               </StackPanel>
             </Grid>
           </DataTemplate>
