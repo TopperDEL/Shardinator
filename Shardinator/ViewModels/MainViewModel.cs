@@ -84,7 +84,10 @@ public partial class MainViewModel
                             {
                                 Images.RemoveAt(0);
                             }
-                            catch { }
+                            catch
+                            {
+                                //Not important if this fails
+                            }
                         });
                     }
                     catch (Exception ex)
