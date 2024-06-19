@@ -13,7 +13,10 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
     <PackageReference Include="MvvmGen" />
     <PackageReference Include="Uno.WinUI" />
-    <PackageReference Include="Uno.Resizetizer" />
+    <PackageReference Include="Uno.Resizetizer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Uno.Extensions.Configuration" />
     <PackageReference Include="Uno.Extensions.Http" />
     <PackageReference Include="Uno.Extensions.Http.Refit" />
@@ -119,5 +122,13 @@
 
   <ItemGroup>
     <AdditionalFiles Remove="Presentation\ShowErrorPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Uno.WinUI.DevServer" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+    <PackageReference Include="Uno.WinUI.DevServer" />
   </ItemGroup>
 </Project>
