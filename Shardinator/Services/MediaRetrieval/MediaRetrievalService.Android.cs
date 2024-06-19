@@ -208,6 +208,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                 Size = long.Parse(GetString(cursor, MediaStore.Files.FileColumns.Size))
                             };
 
+                            CalculateSizeInMB(asset);
+
                             using (var h = new Handler(Looper.MainLooper))
                                 h.Post(async () => { OnMediaReferenceLoaded?.Invoke(this, new MediaEventArgs(asset)); });
 

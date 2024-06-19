@@ -18,23 +18,23 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
     public async Task<IList<MediaReference>> GetMediaReferencesAsync(int shardinationDays, CancellationToken? cancelToken = null)
     {
-        var result = await NativeGetMediaReferencesAsync(shardinationDays, cancelToken);
-        foreach(var media in result)
+        return await NativeGetMediaReferencesAsync(shardinationDays, cancelToken);
+    }
+
+    private void CalculateSizeInMB(MediaReference mediaReference)
+    {
+        if (mediaReference.Size > 0)
         {
-            if(media.Size > 0)
-            {
-                //Convert byte-size to human readable MB:
-                var sizeInMB = media.Size / 1024 / 1024;
-                media.SizeInMB = $"{sizeInMB} MB";
-            }
+            //Convert byte-size to human readable MB:
+            var sizeInMB = mediaReference.Size / 1024 / 1024;
+            mediaReference.SizeInMB = $"{sizeInMB} MB";
         }
-        return result;
     }
 
     public void InformOSAboutShardedFile(string path)
     {
 #if __ANDROID__
-        InformOSAboutShardedFile_Android (path);
+        InformOSAboutShardedFile_Android(path);
 #endif
 
 #if __IOS__
