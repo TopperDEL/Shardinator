@@ -6,8 +6,7 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:um="using:Uno.Material"
       NavigationCacheMode="Required"
-      Background="{ThemeResource BackgroundBrush}"
-      xmlns:uer="using:Uno.Extensions.Reactive.UI">
+      Background="{ThemeResource BackgroundBrush}">
 
   <Grid utu:SafeArea.Insets="VisibleBounds">
     <Grid.RowDefinitions>
@@ -46,9 +45,13 @@
                 <Image Source="{Binding ThumbnailStream, Converter={StaticResource StreamToBitmapImageConverter}}" MaxHeight="150" MaxWidth="150" Stretch="UniformToFill" />
               </Grid>
 
-              <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+              <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,5" VerticalAlignment="Center">
+                <TextBlock Text="Name" Foreground="DarkGray" FontWeight="Light" FontSize="10" Margin="0,0,0,2"/>
                 <TextBlock Text="{Binding Name}" TextWrapping="WrapWholeWords"/>
-                <TextBlock Text="{Binding CreationDate}" Margin="0,10"/>
+                <TextBlock Text="Creation date" Foreground="DarkGray" FontWeight="Light" FontSize="10" Margin="0,10,0,2"/>
+                <TextBlock Text="{Binding CreationDate}"/>
+                <TextBlock Text="Size" Foreground="DarkGray" FontWeight="Light" FontSize="10" Margin="0,10,0,2"/>
+                <TextBlock Text="{Binding SizeInMB}" Margin="0,10"/>
               </StackPanel>
             </Grid>
           </DataTemplate>

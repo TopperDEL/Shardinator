@@ -68,12 +68,18 @@ public class ShardinatorService : IShardinatorService
         try
         {
             string mediaType = media.Type.ToString();
-            string targetPath = media.CreationDate.Year + "/" + media.CreationDate.Month.ToString("D2") + "/" + media.CreationDate.Day.ToString("D2") + "/" + media.Name;
+            string targetPath = $"{media.CreationDate.Year}/{media.CreationDate.Month:D2}/{media.CreationDate.Day:D2}/{media.Name}";
 
+            if(media.ThumbnailStream == null || media.MediaStream == null)
+            {
+                return new Tuple<bool, string>(false, "Media or thumbnail stream is null");
+            }
             var thumbnailShardinated = await ShardinateAsync(THUMB_PREFIX + targetPath.Replace("mp4", "png"), media.ThumbnailStream, mediaType, _objectService, _bucket);
+
             if (thumbnailShardinated)
             {
                 var fileShardinated = await ShardinateAsync(targetPath, media.MediaStream, mediaType, _objectService, _bucket);
+
                 if (!fileShardinated)
                 {
                     return new Tuple<bool, string>(false, "Could not shardinate media");
@@ -90,7 +96,6 @@ public class ShardinatorService : IShardinatorService
                 if (objectInfo.SystemMetadata.ContentLength == media.MediaStream.Length)
                 {
                     File.Delete(media.Path);
-
                     return new Tuple<bool, string>(true, "");
                 }
                 else
@@ -105,7 +110,8 @@ public class ShardinatorService : IShardinatorService
         }
         catch (Exception ex)
         {
-            return new Tuple<bool, string>(false, "Error occured: " + ex.Message);
+            // Log the exception here
+            return new Tuple<bool, string>(false, "Error occurred: " + ex.Message);
         }
     }
 
@@ -117,18 +123,26 @@ public class ShardinatorService : IShardinatorService
 
         var upload = await objectService.UploadObjectAsync(bucket, targetPath, new UploadOptions(), fileData, customMetadata, false).ConfigureAwait(false);
         upload.UploadOperationProgressChanged += Upload_UploadOperationProgressChanged;
-        if (!_token.IsCancellationRequested)
+        try
         {
-            await upload.StartUploadAsync().ConfigureAwait(false);
-
-            if (!upload.Completed)
+            if (!_token.IsCancellationRequested)
             {
-                return false;
-            }
-        }
+                await upload.StartUploadAsync().ConfigureAwait(false);
 
-        return true;
+                if (!upload.Completed)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        finally
+        {
+            // Unsubscribe to avoid potential memory leaks
+            upload.UploadOperationProgressChanged -= Upload_UploadOperationProgressChanged;
+        }
     }
+
 
     private void Upload_UploadOperationProgressChanged(UploadOperation uploadOperation)
     {

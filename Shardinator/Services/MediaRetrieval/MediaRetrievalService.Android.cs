@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Database;
 using Android.Graphics;
+using Android.Media;
 using Android.OS;
 using Android.Provider;
 using Android.Runtime;
@@ -203,7 +204,8 @@ public partial class MediaRetrievalService : IMediaRetrievalService
                                 CreationDate = createDateTime,
                                 MediaStream = Uno.UI.ContextHelper.Current.ContentResolver.OpenInputStream(mediaUri),
                                 MediaURI = mediaUri.ToString(),
-                                ThumbnailStream = thumbnailStream
+                                ThumbnailStream = thumbnailStream,
+                                Size = long.Parse(GetString(cursor, MediaStore.Files.FileColumns.Size))
                             };
 
                             using (var h = new Handler(Looper.MainLooper))
@@ -228,6 +230,10 @@ public partial class MediaRetrievalService : IMediaRetrievalService
         return assets;
     }
 
+    void InformOSAboutShardedFile_Android(string path)
+    {
+        MediaScannerConnection.ScanFile(Uno.UI.ContextHelper.Current, new string[] { path }, null, null);
+    }
 
     string GetString(ICursor cursor, string key)
     {

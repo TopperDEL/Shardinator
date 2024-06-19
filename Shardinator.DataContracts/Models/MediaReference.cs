@@ -24,4 +24,6 @@ public class MediaReference
     public Stream MediaStream { get; set; }
     public Stream ThumbnailStream { get; set; }
     public string MediaURI { get; set; }
+    public long Size { get; set; }
+    public string SizeInMB { get; set; }
 }

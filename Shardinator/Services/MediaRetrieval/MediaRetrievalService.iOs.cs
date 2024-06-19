@@ -218,5 +218,10 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
         return assets;
     }
+
+    void InformOSAboutShardedFile_iOs(string path)
+    {
+        //Todo: check if the OS needs to be informed
+    }
 }
 #endif

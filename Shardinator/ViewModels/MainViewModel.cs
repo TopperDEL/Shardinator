@@ -70,15 +70,21 @@ public partial class MainViewModel
         {
             while (Images.Count > 0 && !cancellationToken.IsCancellationRequested)
             {
+                var first = Images.First();
                 var shardinated = await ShardinatorService.ShardinateAsync(Images.First(), cancellationToken);
                 if (shardinated.Item1)
                 {
                     try
                     {
+                        MediaRetrievalService.InformOSAboutShardedFile(first.Path);
                         // Ensure this part is run on the UI thread
                         Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().TryEnqueue(() =>
                         {
-                            Images.RemoveAt(0);
+                            try
+                            {
+                                Images.RemoveAt(0);
+                            }
+                            catch { }
                         });
                     }
                     catch (Exception ex)

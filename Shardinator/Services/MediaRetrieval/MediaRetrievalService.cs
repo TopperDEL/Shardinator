@@ -18,6 +18,27 @@ public partial class MediaRetrievalService : IMediaRetrievalService
 
     public async Task<IList<MediaReference>> GetMediaReferencesAsync(int shardinationDays, CancellationToken? cancelToken = null)
     {
-        return await NativeGetMediaReferencesAsync(shardinationDays, cancelToken);
+        var result = await NativeGetMediaReferencesAsync(shardinationDays, cancelToken);
+        foreach(var media in result)
+        {
+            if(media.Size > 0)
+            {
+                //Convert byte-size to human readable MB:
+                var sizeInMB = media.Size / 1024 / 1024;
+                media.SizeInMB = $"{sizeInMB} MB";
+            }
+        }
+        return result;
+    }
+
+    public void InformOSAboutShardedFile(string path)
+    {
+#if __ANDROID__
+        InformOSAboutShardedFile_Android (path);
+#endif
+
+#if __IOS__
+        InformOSAboutShardedFile_iOs(path);
+#endif
     }
 }

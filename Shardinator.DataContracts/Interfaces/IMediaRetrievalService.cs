@@ -21,4 +21,6 @@ public interface IMediaRetrievalService
     bool IsLoading { get; }
 
     Task<IList<MediaReference>> GetMediaReferencesAsync(int shardinationDays, CancellationToken? cancelToken = null);
+
+    public void InformOSAboutShardedFile(string path);
 }
