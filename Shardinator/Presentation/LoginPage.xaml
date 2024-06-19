@@ -21,7 +21,7 @@
     <StackPanel Grid.Row="1"
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
-          Width="600"
+          MaxWidth="600" MinWidth="300"
           Spacing="16">
       <TextBox Text="{Binding Bucket, Mode=TwoWay}"
           PlaceholderText="Bucket"
